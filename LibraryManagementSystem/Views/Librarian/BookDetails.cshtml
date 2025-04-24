@@ -1,0 +1,109 @@
+﻿@model LibraryManagementSystem.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+
+    string returnUrl = "MyBooks";
+    string returnText = "Back to My Books";
+
+    if (ViewBag.Source?.ToString() == "Index")
+    {
+        returnUrl = "Index";
+        returnText = "Back to All Books";
+    }
+}
+
+<div class="container my-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center text-primary mb-4">@Model.Title</h2>
+
+        <div class="row gy-4">
+            <!-- Book Image -->
+            <div class="col-md-4 d-flex justify-content-center align-items-start">
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Url.Content($"~{Model.ImagePath}")"
+                         class="img-fluid rounded shadow-sm"
+                         alt="@Model.Title"
+                         style="max-height: 350px; object-fit: contain; background-color: #f8f9fa; padding: 10px;" />
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center w-100">
+                        No image available
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-8">
+                <h4 class="mb-3 text-secondary">Book Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Author:</dt>
+                    <dd class="col-sm-8">@Model.Author</dd>
+
+                    <dt class="col-sm-4">ISBN:</dt>
+                    <dd class="col-sm-8">@Model.ISBN</dd>
+
+                    <dt class="col-sm-4">Genre:</dt>
+                    <dd class="col-sm-8"><span class="badge bg-info text-dark">@Model.Genre</span></dd>
+
+                    <dt class="col-sm-4">Category:</dt>
+                    <dd class="col-sm-8">@Model.Category</dd>
+
+                    <dt class="col-sm-4">Subject:</dt>
+                    <dd class="col-sm-8">@Model.Subject</dd>
+
+                    <dt class="col-sm-4">Summary:</dt>
+                    <dd class="col-sm-8">@Model.Summary</dd>
+
+                    <dt class="col-sm-4">Price:</dt>
+                    <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+                    <dt class="col-sm-4">Language:</dt>
+                    <dd class="col-sm-8">@Model.Language</dd>
+
+                    <dt class="col-sm-4">Edition:</dt>
+                    <dd class="col-sm-8">@Model.Edition</dd>
+
+                    <dt class="col-sm-4">Published Date:</dt>
+                    <dd class="col-sm-8">@Model.PublishedDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Publisher:</dt>
+                    <dd class="col-sm-8">@Model.Publisher</dd>
+
+                    <dt class="col-sm-4">Total Copies:</dt>
+                    <dd class="col-sm-8">@Model.TotalCopies</dd>
+
+                    <dt class="col-sm-4">Available Copies:</dt>
+                    <dd class="col-sm-8">@Model.AvailableCopies</dd>
+
+                    <dt class="col-sm-4">Created By:</dt>
+                    <dd class="col-sm-8">@Model.CreatedBy</dd>
+
+                    <dt class="col-sm-4">Created On:</dt>
+                    <dd class="col-sm-8">@Model.CreateDate.ToString("MMMM dd, yyyy")</dd>
+                </dl>
+
+                <div class="mt-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        @if (User.IsInRole("Librarian") || Model.CreatedBy == User.Identity.Name)
+                        {
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("EditBook", "Librarian", new { id = Model.BookId })" class="btn btn-primary">
+                                    <i class="fas fa-edit me-2"></i>Edit
+                                </a>
+                                <a href="@Url.Action("DeleteBook", "Librarian", new { id = Model.BookId })" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt me-2"></i>Delete
+                                </a>
+                            </div>
+                        }
+
+                        <a href="@Url.Action(returnUrl, "Librarian")" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>@returnText
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

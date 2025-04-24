@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <img src="~/images/lms logo.jpg" class="img-fluid rounded" alt="Library Image" style="max-height: 400px;" />
+    </div>
+
+    <div class="text-center">
+        <h1 class="display-4 text-primary">Welcome to Library Management System</h1>
+        <p class="lead mt-3">Manage Books, Users, and Rentals Easily and Efficiently.</p>
+        <p>Start exploring your digital library and manage everything from one place!</p>
+
+        <a class="btn btn-outline-primary btn-lg mt-3" href="/Account/Login">Get Started</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="img-hover" style="height: 80px;" />
+            <h5 class="mt-2">User Management</h5>
+            <p>Add and manage users with admin or reader roles.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" class="img-hover" style="height: 80px;" />
+            <h5 class="mt-2">Book Tracking</h5>
+            <p>Track book availability, rentals, and returns.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/2920/2920222.png" class="img-hover" style="height: 80px;" />
+            <h5 class="mt-2">Reports & Chat</h5>
+            <p>View usage reports and chat between users and librarians.</p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5 mt-5">
+    <div class="container">
+        <h3 class="text-center mb-4 text-secondary">About Our System</h3>
+        <p class="text-center">Our Library Management System is designed for schools, colleges, and public libraries to streamline book lending, user management, and internal communication. With a clean interface and powerful tools, managing a library has never been easier!</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h3 class="text-center mb-4 text-secondary">What Our Users Say</h3>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <blockquote class="blockquote">
+                <p>"Super easy to use and perfect for our library!"</p>
+                <footer class="blockquote-footer">Jay, Admin</footer>
+            </blockquote>
+        </div>
+        <div class="col-md-4">
+            <blockquote class="blockquote">
+                <p>"I love how I can see book availability instantly!"</p>
+                <footer class="blockquote-footer">Khushi, Reader</footer>
+            </blockquote>
+        </div>
+        <div class="col-md-4">
+            <blockquote class="blockquote">
+                <p>"The best part is the chat system. So helpful!"</p>
+                <footer class="blockquote-footer">Manan, Librarian</footer>
+            </blockquote>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white text-center py-3">
+    <div class="container">
+        <p class="mb-0">© 2025 Library Management System. All rights reserved.</p>
+    </div>
+</footer>
+
+<style>
+    .img-hover:hover {
+        transform: scale(1.1);
+        transition: transform 0.3s ease-in-out;
+    }
+</style>

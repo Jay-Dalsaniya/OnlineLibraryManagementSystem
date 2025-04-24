@@ -1,0 +1,203 @@
+﻿@model LibraryManagementSystem.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2 class="text-center my-4 display-4">User Details</h2>
+
+<!-- User Details Card -->
+<div class="card shadow-lg rounded-3 mb-5">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0 text-center">User Information</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- User Image -->
+            <div class="col-md-3 text-center mb-4">
+                <img src="@(Url.Content("~/images/" + Model.ImageName))" alt="User Image"
+                     class="rounded-circle img-fluid border shadow-sm" style="width: 250px; height: 250px; object-fit: cover;" />
+            </div>
+            <!-- User Details -->
+            <div class="col-md-9">
+                <p><strong>Username:</strong> @Model.FirstName @Model.LastName</p>
+                <p><strong>Email:</strong> @Model.Email</p>
+                <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+                <p><strong>Address:</strong> @Model.Address</p>
+                <p><strong>Role:</strong> <span class="badge bg-info text-dark">@Model.Role</span></p>
+                <p><strong>Date of Birth:</strong> @Model.Birthday.ToString("dd/MM/yyyy")</p>
+                <p><strong>Join Date:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Role == "Reader")
+{
+    <!-- Reader-Specific Content -->
+    <h3 class="text-center my-4 text-info">Book Rentals</h3>
+    @if (Model.BookRentals.Any())
+    {
+        <table class="table table-bordered table-hover shadow-sm table-responsive-md">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Genre</th>
+                    <th>Condition</th>
+                    <th>Rent Date</th>
+                    <th>Return Date</th>
+                    <th>Due Date</th>
+                    <th>Rental Fee</th>
+                    <th>Rental Duration</th>
+                    <th>Fine</th>
+                    <th>Late Return</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rental in Model.BookRentals)
+                {
+                    <tr class="@((!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate) ? "table-danger" : "")">
+                        <td>@rental.Book.Title</td>
+                        <td>@rental.Book.Author</td>
+                        <td>@rental.Book.ISBN</td>
+                        <td>@rental.Book.Genre</td>
+                        <td>@rental.Book.Condition</td>
+                        <td>@rental.RentDate.ToShortDateString()</td>
+                        <td>
+                            @if (rental.ReturnDate.HasValue)
+                            {
+                                @rental.ReturnDate.Value.ToShortDateString()
+                            }
+                            else
+                            {
+                                <span class="text-danger">Not Returned</span>
+                            }
+                        </td>
+                        <td>@rental.DueDate.ToShortDateString()</td>
+                        <td>@string.Format("{0:C}", rental.RentalFee)</td>
+                        <td>
+                            @if (rental.ReturnDate.HasValue)
+                            {
+                                @(rental.ReturnDate.Value.Subtract(rental.RentDate).Days + " Days")
+                            }
+                            else
+                            {
+                                <span class="text-danger">N/A</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
+                            {
+                                @string.Format("{0:C}", rental.Fine ?? 0)
+                            }
+                            else
+                            {
+                                <span>No Fine</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
+                            {
+                                <span class="text-danger">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">No</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center text-muted">No rentals found for this user.</p>
+    }
+
+    <h3 class="text-center my-4 text-info">Book Purchases</h3>
+    @if (Model.BookPurchases.Any())
+    {
+        <table class="table table-striped table-bordered shadow-sm table-responsive-md">
+            <thead class="bg-secondary text-white">
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Genre</th>
+                    <th>Condition</th>
+                    <th>Publisher</th>
+                    <th>Price</th>
+                    <th>Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var purchase in Model.BookPurchases)
+                {
+                    <tr>
+                        <td>@purchase.Book.Title</td>
+                        <td>@purchase.Book.Author</td>
+                        <td>@purchase.Book.ISBN</td>
+                        <td>@purchase.Book.Genre</td>
+                        <td>@purchase.Book.Condition</td>
+                        <td>@purchase.Book.Publisher</td>
+                        <td>@string.Format("{0:C}", purchase.Book.Price)</td>
+                        <td>@purchase.PurchaseDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-center text-muted">No purchases found for this user.</p>
+    }
+}
+else @if (Model.Role == "Librarian")
+{
+    @if (ViewBag.UploadedBooks != null && ViewBag.UploadedBooks.Count > 0)
+    {
+        <h3 class="text-center my-4 text-warning">Books Uploaded by Librarian</h3>
+        <table class="table table-bordered table-hover shadow-sm table-responsive-md">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>ISBN</th>
+                    <th>Price</th>
+                    <th>Published Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in ViewBag.UploadedBooks)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@book.ISBN</td>
+                        <td>@string.Format("{0:C}", book.Price)</td>
+                        <td>@book.PublishedDate.ToShortDateString()</td>
+                        <td>
+                            <a asp-action="ViewBookDetails" asp-route-bookId="@book.BookId" class="btn btn-info btn-sm">View</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h3 class="text-center text-muted">No books uploaded by this librarian.</h3>
+    }
+}
+
+<!-- Back Button -->
+<div class="text-center mt-4">
+    <a asp-action="ViewAllUsers" class="btn btn-primary btn-lg shadow-lg">
+        <i class="bi bi-arrow-left-circle"></i> Back to Users
+    </a>
+</div>
+

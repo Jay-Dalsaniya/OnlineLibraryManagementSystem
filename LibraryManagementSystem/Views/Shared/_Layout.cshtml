@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LibraryManagementSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LibraryManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        .dropdown:hover > .dropdown-menu {
+            display: block;
+            margin-top: 0; 
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibraryManagementSystem</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
+                            </li>
+                            var role = User.FindFirst("Role")?.Value;
+
+                            if (role == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Dashboard">Admin</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ViewAllUsers">View All Users</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ViewAllBooks">View All Books</a>
+                                </li>
+                            }
+                            if (role == "Librarian")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" id="librarianDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-book"></i> Librarian
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="librarianDropdown">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="Dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="AddBook"><i class="fas fa-plus-circle"></i> Add Book</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="Index"><i class="fa fa-book-open"></i> All Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="MyBooks"><i class="fas fa-book"></i> My Books</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" id="librarianDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-user"></i> ReaderDetails
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="librarianDropdown2">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="ViewAllIssuedBooks"><i class="fas fa-exchange-alt"></i> View All Issued Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="ViewAllReturnedBooks"><i class="fas fa-undo-alt"></i> View All Returned Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="ViewAllPurchasedBooks"> <i class="fas fa-shopping-cart"></i> View All Purchased Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Librarian" asp-action="AllTransactions"><i class="fas fa-exchange-alt"></i> All Transactions</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            if (role == "Reader")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" id="readerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user"></i> Reader
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="readerDropdown">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="Dashboard">Dashboard</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="ViewBooks">View Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="ViewIssuedBooks">Issued Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="ViewReturnedBooks">Return Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="AvailableBooks">Available Books</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="Reader" asp-action="ViewPurchasedBooks">Purchased Books</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <form action="@Url.Action("Logout", "Account")" method="post" class="d-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-dark">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - LibraryManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

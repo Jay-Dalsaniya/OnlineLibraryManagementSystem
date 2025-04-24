@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Enter Reset Code";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-light">
+                <div class="card-body">
+                    <h2 class="card-title text-center text-primary mb-4">
+                        <i class="bi bi-shield-lock"></i> Enter Reset Code
+                    </h2>
+
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <input type="hidden" name="email" value="@ViewBag.Email" />
+
+                        <div class="form-group mb-4">
+                            <label for="resetCode" class="form-label">Enter the Reset Code</label>
+                            <input type="text" class="form-control form-control-lg" id="resetCode" name="resetCode" required placeholder="Enter your reset code" />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                        </div>
+
+                        <div class="mt-3 text-center">
+                            <p class="text-muted">
+                                The reset code was sent to your email. If you didn't receive it, check your spam folder or <a href="#">request a new one</a>.
+                            </p>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-arrow-left-circle"></i> Back to Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

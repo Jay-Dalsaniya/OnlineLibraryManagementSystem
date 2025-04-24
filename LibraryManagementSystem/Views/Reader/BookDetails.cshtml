@@ -1,0 +1,85 @@
+﻿ @model LibraryManagementSystem.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<div class="container my-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center text-primary mb-4">@Model.Title</h2>
+
+        <div class="row gy-4">
+            <div class="col-md-4 d-flex justify-content-center align-items-start">
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Url.Content($"~{Model.ImagePath}")"
+                         class="img-fluid rounded shadow-sm"
+                         alt="@Model.Title"
+                         style="max-height: 350px; object-fit: contain; background-color: #f8f9fa; padding: 10px;" />
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center w-100">
+                        No image available
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-8">
+                <h4 class="mb-3 text-secondary">Book Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Author:</dt>
+                    <dd class="col-sm-8">@Model.Author</dd>
+
+                    <dt class="col-sm-4">ISBN:</dt>
+                    <dd class="col-sm-8">@Model.ISBN</dd>
+
+                    <dt class="col-sm-4">Genre:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info text-dark">@Model.Genre</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Category:</dt>
+                    <dd class="col-sm-8">@Model.Category</dd>
+
+                    <dt class="col-sm-4">Subject:</dt>
+                    <dd class="col-sm-8">@Model.Subject</dd>
+
+                    <dt class="col-sm-4">Summary:</dt>
+                    <dd class="col-sm-8">@Model.Summary</dd>
+
+                    <dt class="col-sm-4">Price:</dt>
+                    <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+
+                    <dt class="col-sm-4">Language:</dt>
+                    <dd class="col-sm-8">@Model.Language</dd>
+
+                    <dt class="col-sm-4">Edition:</dt>
+                    <dd class="col-sm-8">@Model.Edition</dd>
+
+                    <dt class="col-sm-4">Published Date:</dt>
+                    <dd class="col-sm-8">@Model.PublishedDate.ToString("yyyy-MM-dd")</dd>
+
+                    <dt class="col-sm-4">Total Copies:</dt>
+                    <dd class="col-sm-8">@Model.TotalCopies</dd>
+                </dl>
+
+                <div class="mt-4 d-flex gap-2">
+                    <a href="@Url.Action("IssueBook", "Reader", new { id = Model.BookId })" class="btn btn-outline-success">
+                        <i class="fas fa-book-reader me-1"></i> Issue Book
+                    </a>
+
+                    <a href="@Url.Action("BuyBook", "Reader", new { id = Model.BookId })" class="btn btn-outline-warning">
+                        <i class="fas fa-shopping-cart me-1"></i> Buy Book
+                    </a>
+
+                    <a href="@Url.Action("AvailableBooks", "Reader")" class="btn btn-secondary ms-auto">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Books
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />

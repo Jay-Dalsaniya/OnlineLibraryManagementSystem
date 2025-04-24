@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+
+<div class="container my-5">
+    <div class="bg-light p-5 rounded shadow-sm">
+        <h1 class="text-center text-primary mb-4">@ViewData["Title"]</h1>
+        <p class="lead text-center mb-5">This Privacy Policy outlines how we collect, use, and protect your personal information on our Online Library Management System.</p>
+
+        <div class="accordion" id="privacyAccordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        1. Information We Collect
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#privacyAccordion">
+                    <div class="accordion-body">
+                        We may collect the following data when you register or use our services:
+                        <ul>
+                            <li>Your name and email address</li>
+                            <li>Username and password (encrypted)</li>
+                            <li>Books issued and returned</li>
+                            <li>Messages sent between readers and librarians</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        2. How We Use Your Information
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                    <div class="accordion-body">
+                        Your data is used to:
+                        <ul>
+                            <li>Maintain user accounts and login access</li>
+                            <li>Track borrowed and returned books</li>
+                            <li>Provide communication between librarians and readers</li>
+                            <li>Improve the functionality of the system</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        3. Data Sharing and Third Parties
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                    <div class="accordion-body">
+                        We do not sell or share your personal data with any third party. Data is stored securely and is only accessible by authorized administrators of the system.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        4. Your Responsibilities
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                    <div class="accordion-body">
+                        Users are responsible for:
+                        <ul>
+                            <li>Keeping login credentials secure</li>
+                            <li>Reporting any suspicious activity</li>
+                            <li>Using the platform ethically and respectfully</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                        5. Contact Us
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                    <div class="accordion-body">
+                        If you have questions about this Privacy Policy, feel free to reach out to the system administrator at: <strong>admin@librarysystem.com</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

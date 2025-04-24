@@ -1,0 +1,86 @@
+﻿ @using X.PagedList
+@model IPagedList<LibraryManagementSystem.Models.BookPurchase>
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <h2 class="mb-4 text-primary">📚 Your Purchased Books</h2>
+
+            <form method="get" class="row g-3 align-items-end mb-4">
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">Search</label>
+                    <input type="text" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control rounded-3" placeholder="Title, Author, or ISBN" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Min Price</label>
+                    <input type="number" name="minPrice" value="@ViewData["MinPrice"]" class="form-control rounded-3" placeholder="0.00" step="0.01" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Max Price</label>
+                    <input type="number" name="maxPrice" value="@ViewData["MaxPrice"]" class="form-control rounded-3" placeholder="0.00" step="0.01" />
+                </div>
+                <div class="col-md-2 text-end">
+                    <button type="submit" class="btn btn-gradient btn-primary w-100 rounded-3">🔍 Search</button>
+                </div>
+            </form>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info rounded-3 text-center">
+                    You haven't purchased any books yet.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle shadow-sm rounded-4 overflow-hidden">
+                        <thead class="table-light">
+                            <tr class="text-nowrap">
+                                <th>📖 Title</th>
+                                <th>✍️ Author</th>
+                                <th>🔢 ISBN</th>
+                                <th>💰 Price</th>
+                                <th>📅 Purchase Date</th>
+                                <th class="text-center">🔎 Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var purchase in Model)
+                            {
+                                <tr>
+                                    <td>@purchase.Book.Title</td>
+                                    <td>@purchase.Book.Author</td>
+                                    <td>@purchase.Book.ISBN</td>
+                                    <td class="text-success fw-semibold">@purchase.Price.ToString("C")</td>
+                                    <td>@purchase.PurchaseDate.ToString("dd MMM yyyy")</td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("BookDetails", "Reader", new { bookId = purchase.BookId })" class="btn btn-sm btn-outline-info rounded-pill px-3">
+                                            View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        Page <strong>@Model.PageNumber</strong> of <strong>@Model.PageCount</strong>
+                    </div>
+                    <div>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a href="@Url.Action("ViewPurchasedBooks", new { page = Model.PageNumber - 1, searchTerm = ViewData["SearchTerm"], minPrice = ViewData["MinPrice"], maxPrice = ViewData["MaxPrice"] })" class="btn btn-outline-primary me-2">⬅️ Previous</a>
+                        }
+                        @if (Model.HasNextPage)
+                        {
+                            <a href="@Url.Action("ViewPurchasedBooks", new { page = Model.PageNumber + 1, searchTerm = ViewData["SearchTerm"], minPrice = ViewData["MinPrice"], maxPrice = ViewData["MaxPrice"] })" class="btn btn-outline-primary">Next ➡️</a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

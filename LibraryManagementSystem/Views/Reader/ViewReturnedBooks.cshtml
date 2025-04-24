@@ -1,0 +1,116 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Returned Books";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <h2 class="text-center text-primary mb-4">📚 Returned Books</h2>
+
+            <div class="table-responsive">
+                <table id="returnedBooksTable" class="table table-hover align-middle shadow-sm rounded overflow-hidden table-striped">
+                    <thead class="table-light text-nowrap">
+                        <tr>
+                            <th>📖 Title</th>
+                            <th>✍️ Author</th>
+                            <th>🔢 ISBN</th>
+                            <th>🏢 Publisher</th>
+                            <th>🏷️ Genre</th>
+                            <th>💰 Price</th>
+                            <th>📅 Rental Date</th>
+                            <th>✅ Return Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in Model)
+                        {
+                            <tr>
+                                <td>@book.Title</td>
+                                <td>@book.Author</td>
+                                <td>@book.ISBN</td>
+                                <td>@book.Publisher</td>
+                                <td>@book.Genre</td>
+                                <td class="text-success fw-semibold">@book.Price.ToString("C")</td>
+                                <td>@book.RentDate?.ToString("dd MMM yyyy")</td>
+                                <td>@book.ReturnDate?.ToString("dd MMM yyyy")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info text-center mt-4 rounded-3">
+                    No returned books found.
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+
+<!-- jQuery + DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#returnedBooksTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "lengthMenu": [5, 10, 25, 50],
+            "language": {
+                "search": "Filter:",
+                "paginate": {
+                    "previous": "← Previous",
+                    "next": "Next →"
+                }
+            }
+        });
+    });
+</script>
+
+<!-- Custom Styling -->
+<style>
+    .table {
+        border-radius: 12px !important;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .table-striped tbody tr:nth-child(odd) {
+        background-color: #fafafa;
+    }
+
+    .text-success {
+        font-weight: bold;
+    }
+
+    .alert-info {
+        font-size: 1.2rem;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>

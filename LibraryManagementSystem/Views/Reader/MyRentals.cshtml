@@ -1,0 +1,55 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.BookRental>
+
+@{
+    ViewData["Title"] = "My Rentals";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">My Rented Books</h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered shadow-sm">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Rent Date</th>
+                        <th>Due Date</th>
+                        <th>Late Fee</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rental in Model)
+                    {
+                        <tr>
+                            <td>@rental.Book.Title</td>
+                            <td>@rental.Book.Author</td>
+                            <td>@rental.RentDate.ToString("yyyy-MM-dd")</td>
+                            <td>@rental.DueDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                @if (rental.LateFee.HasValue)
+                                {
+                                    <span class="text-danger"><i class="fas fa-exclamation-circle"></i> @rental.LateFee.Value.ToString("C")</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success"><i class="fas fa-check-circle"></i> No late fee</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            <i class="fas fa-book-open"></i> You have not rented any books yet.
+        </div>
+    }
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

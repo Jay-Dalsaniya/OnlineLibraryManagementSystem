@@ -1,0 +1,58 @@
+﻿@model LibraryManagementSystem.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
+<div class="container d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row w-100 shadow-lg rounded overflow-hidden" style="max-width: 1000px;">
+        <!-- Left side with big image -->
+        <div class="col-lg-6 d-none d-lg-block p-0">
+            <img src="~/images/login-image1.png" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Login Illustration" />
+        </div>
+
+        <!-- Right side with login form -->
+        <div class="col-lg-6 bg-white d-flex align-items-center">
+            <div class="card border-0 w-100 p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-circle fa-3x text-primary"></i>
+                    <h3 class="mt-2">Welcome Back</h3>
+                    <p class="text-muted">Please sign in to your account</p>
+                </div>
+
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+
+                    <div class="text-center">
+                        <p class="mb-1">Don't have an account? <a href="@Url.Action("Register", "Account")">Register here</a>.</p>
+                        <p><a href="@Url.Action("ForgotPassword", "Account")">Forgot your password?</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

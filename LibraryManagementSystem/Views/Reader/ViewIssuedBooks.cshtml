@@ -1,0 +1,124 @@
+﻿@model IEnumerable<LibraryManagementSystem.Models.BookRental>
+
+@{
+    ViewData["Title"] = "Issued Books";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Issued Books</h4>
+        </div>
+        <div class="card-body">
+            <table id="issuedBooksTable" class="table table-hover table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Rent Date</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var rental in Model)
+                    {
+                        <tr>
+                            <td>@rental.Book.Title</td>
+                            <td>@rental.Book.Author</td>
+                            <td>@rental.RentDate.ToString("dd MMM yyyy")</td>
+                            <td>@rental.DueDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                @if (rental.RentalStatus == "Active")
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Returned</span>
+                                }
+                            </td>
+                            <td>
+                                @if (rental.RentalStatus == "Active")
+                                {
+                                    <a href="@Url.Action("ReturnBook", "Reader", new { rentalId = rental.BookRentalId })" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-undo-alt"></i> Return
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#issuedBooksTable').DataTable({
+            "paging": true,  
+            "searching": true,  
+            "ordering": true, 
+            "order": [[2, "desc"]],  
+            "lengthMenu": [5, 10, 25, 50],  
+            "language": {
+                "search": "Filter records:",
+                "lengthMenu": "Show _MENU_ records per page",
+                "info": "Showing _START_ to _END_ of _TOTAL_ records"
+            }
+        });
+    });
+</script>
+<div id="lateFeeModal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Book Return Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="lateFeeMessage"></p>
+                <p id="fineMessage"></p>
+                <p id="rentalFeeMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function showReturnDetails() {
+        var lateFee = '@ViewData["LateFee"]';  
+        var fine = '@ViewData["Fine"]';
+        var rentalFee = '@ViewData["RentalFee"]';
+
+        document.getElementById("lateFeeMessage").innerText = "Late Fee: ₹" + lateFee;
+
+        $('#lateFeeModal').modal('show');
+    }
+
+    $(document).ready(function () {
+        var successMessage = '@Html.Raw(TempData["SuccessMessage"])';
+        if (successMessage) {
+            alert(successMessage);  
+        }
+    });
+</script>

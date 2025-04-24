@@ -1,0 +1,163 @@
+﻿@model LibraryManagementSystem.Models.User
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0-beta2/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+    /* Add gradient background with blur effect */
+    .profile-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #6f7dff, #839bff);
+        backdrop-filter: blur(10px); /* Apply blur effect */
+        -webkit-backdrop-filter: blur(10px); /* For Safari */
+        background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background to let blur effect show */
+    }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+    /* Profile Image Styling */
+    .profile-image {
+        border: 4px solid #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Button Customization */
+    .btn-custom {
+        border-radius: 50px;
+        transition: background-color 0.3s ease;
+        padding: 10px 25px;
+        font-weight: bold;
+    }
+
+        .btn-custom:hover {
+            background-color: #505b73;
+        }
+
+    /* User Info Styling */
+    .user-info-row {
+        border-bottom: 1px solid #e0e0e0;
+        padding: 10px 0;
+    }
+
+        .user-info-row:last-child {
+            border-bottom: none;
+        }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    /* Card shadow and hover effects for the profile image */
+    .profile-card .profile-image {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .profile-card .profile-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Styling for the profile card container */
+    .container {
+        background-color: #f9f9f9;
+        padding-top: 30px;
+    }
+
+    /* Adding space for profile image and text */
+    .profile-image-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .profile-image-container h5 {
+            font-size: 1.25rem;
+            color: #ffffff;
+        }
+
+        .profile-image-container small {
+            font-size: 1rem;
+            color: #f8f9fa;
+        }
+
+    /* Hover effects for the action buttons */
+    .btn-light:hover, .btn-warning:hover {
+        opacity: 0.85;
+    }
+
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card profile-card shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="row g-0">
+                    <!-- Profile Image -->
+                    <div class="col-md-4 bg-primary text-white d-flex flex-column align-items-center justify-content-center p-4 profile-image-container">
+                        <div class="mb-3">
+                            @if (!string.IsNullOrEmpty(Model.ImageName))
+                            {
+                                <img src="@Url.Content("~/images/" + Model.ImageName)" class="img-fluid rounded-circle profile-image" style="width: 150px; height: 150px; object-fit: cover;" alt="Profile" />
+                            }
+                            else
+                            {
+                                <img src="~/images/default-avatar.png" class="img-fluid rounded-circle profile-image" style="width: 150px; height: 150px; object-fit: cover;" alt="Default" />
+                            }
+                        </div>
+                        <h5 class="mb-0">@Model.FirstName @Model.LastName</h5>
+                        <small>@Model.Role</small>
+
+                        <div class="mt-4 w-100 text-center">
+                            <a href="@Url.Action("EditProfile", "Account")" class="btn btn-light btn-custom w-100 mb-2">Edit Profile</a>
+                            <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-warning btn-custom w-100">Change Password</a>
+                        </div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="col-md-8 p-4 bg-white">
+                        <h4 class="section-title"><i class="fas fa-user-circle me-2"></i> User Information</h4>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Email:</strong></span></div>
+                            <div class="col-6">@Model.Email</div>
+                        </div>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Phone Number:</strong></span></div>
+                            <div class="col-6">@Model.PhoneNumber</div>
+                        </div>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Address:</strong></span></div>
+                            <div class="col-6">@Model.Address</div>
+                        </div>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Gender:</strong></span></div>
+                            <div class="col-6">@Model.Gender</div>
+                        </div>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Birthday:</strong></span></div>
+                            <div class="col-6">@Model.Birthday.ToString("MMMM dd, yyyy")</div>
+                        </div>
+                        <div class="row user-info-row">
+                            <div class="col-6"><span class="info-label"><strong>Account Created On:</strong></span></div>
+                            <div class="col-6">@Model.CreatedDate.ToString("MMMM dd, yyyy")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

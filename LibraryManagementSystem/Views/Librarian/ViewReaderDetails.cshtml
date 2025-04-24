@@ -1,0 +1,116 @@
+﻿@model LibraryManagementSystem.Models.User
+
+@{
+    ViewData["Title"] = "Reader Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+        <div class="card-body p-4">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.ImageName))
+                    {
+                        <img src="@Url.Content("~/images/" + Model.ImageName)" alt="Profile Image" class="img-fluid rounded-circle border border-3 shadow" style="width: 180px; height: 180px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/default-profile.png" alt="Default Profile Photo" class="img-fluid rounded-circle border border-3 shadow" style="width: 180px; height: 180px;" />
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <h3 class="text-primary fw-bold mb-3"><i class="bi bi-person-bounding-box"></i> Reader Profile</h3>
+                    <div class="row g-2">
+                        <div class="col-sm-6"><i class="bi bi-person-fill"></i> <strong>Name:</strong> @Model.FirstName @Model.LastName</div>
+                        <div class="col-sm-6"><i class="bi bi-envelope-fill"></i> <strong>Email:</strong> @Model.Email</div>
+                        <div class="col-sm-6"><i class="bi bi-telephone-fill"></i> <strong>Phone:</strong> @Model.PhoneNumber</div>
+                        <div class="col-sm-6"><i class="bi bi-geo-alt-fill"></i> <strong>Address:</strong> @Model.Address</div>
+                        <div class="col-sm-6"><i class="bi bi-person-lines-fill"></i> <strong>Username:</strong> @Model.FirstName @Model.LastName</div>
+                        <div class="col-sm-6"><i class="bi bi-person-badge"></i> <strong>Role:</strong> <span class="badge bg-info text-dark">@Model.Role</span></div>
+                        <div class="col-sm-6"><i class="bi bi-calendar-heart"></i> <strong>Date of Birth:</strong> @Model.Birthday.ToString("dd MMM yyyy")</div>
+                        <div class="col-sm-6"><i class="bi bi-calendar-check-fill"></i> <strong>Join Date:</strong> @Model.CreatedDate.ToString("dd MMM yyyy")</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h4 class="text-info mb-3"><i class="bi bi-bookmarks-fill me-2"></i>Issued Books</h4>
+            @if (Model.BookRentals != null && Model.BookRentals.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>ISBN</th>
+                                <th>Rent Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rental in Model.BookRentals)
+                            {
+                                <tr>
+                                    <td>@rental.Book.Title</td>
+                                    <td>@rental.Book.ISBN</td>
+                                    <td>@rental.RentDate.ToShortDateString()</td>
+                                    <td>@rental.DueDate.ToShortDateString()</td>
+                                    <td>
+                                        <span class="badge @(rental.RentalStatus == "Returned" ? "bg-success" : "bg-warning text-dark")">
+                                            @rental.RentalStatus
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No books have been issued.</p>
+            }
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h4 class="text-success mb-3"><i class="bi bi-cart-check-fill me-2"></i>Purchased Books</h4>
+            @if (Model.BookPurchases != null && Model.BookPurchases.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th>ISBN</th>
+                                <th>Price</th>
+                                <th>Purchase Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var purchase in Model.BookPurchases)
+                            {
+                                <tr>
+                                    <td>@purchase.Book.Title</td>
+                                    <td>@purchase.Book.ISBN</td>
+                                    <td>@purchase.Price.ToString("C")</td>
+                                    <td>@purchase.PurchaseDate.ToShortDateString()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No books have been purchased.</p>
+            }
+        </div>
+    </div>
+</div>

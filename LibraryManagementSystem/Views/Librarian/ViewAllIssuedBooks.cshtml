@@ -1,0 +1,62 @@
+﻿@using X.PagedList
+@model IPagedList<LibraryManagementSystem.Models.BookRental>
+
+<h2>All Issued Books</h2>
+
+<form method="get" class="mb-3 row g-3 align-items-center">
+    <div class="col-auto">
+        <input type="text" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" placeholder="Search by Book Title or Reader Name or ISBN" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+<div class="mb-3">
+    <a href="@Url.Action("ExportIssuedBooksToExcel", new { searchTerm = ViewData["SearchTerm"] })" class="btn btn-success">
+        <i class="bi bi-file-earmark-excel-fill"></i> Export to Excel
+    </a>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Reader Name</th>
+            <th>Email</th>
+            <th>Book Title</th>
+            <th>ISBN</th>
+            <th>Rent Date</th>
+            <th>Due Date</th>
+            <th>Action</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.User.FirstName @rental.User.LastName</td>
+                <td>@rental.User.Email</td>
+                <td>@rental.Book.Title</td>
+                <td>@rental.Book.ISBN</td>
+                <td>@rental.RentDate.ToShortDateString()</td>
+                <td>@rental.DueDate.ToShortDateString()</td>
+                <td>
+                    <a href="@Url.Action("ViewReaderDetails", "Librarian", new { userId = rental.User.Id })"
+                       class="btn btn-primary btn-info">
+                        View Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between mt-4">
+    @if (Model.HasPreviousPage)
+    {
+        <a href="@Url.Action("ViewAllIssuedBooks", new { page = Model.PageNumber - 1, searchTerm = ViewData["SearchTerm"] })" class="btn btn-primary">Previous</a>
+    }
+    @if (Model.HasNextPage)
+    {
+        <a href="@Url.Action("ViewAllIssuedBooks", new { page = Model.PageNumber + 1, searchTerm = ViewData["SearchTerm"] })" class="btn btn-primary">Next</a>
+    }
+</div>

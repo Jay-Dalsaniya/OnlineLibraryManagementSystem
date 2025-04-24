@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Re-Issue Book";
+}
+
+<h2>Re-Issue Book</h2>
+
+<p>Are you sure you want to re-issue the book titled <strong>@Model.Book.Title</strong>?</p>
+
+<form method="post" action="@Url.Action("ReIssueBook", "Reader", new { bookId = Model.Book.BookId })">
+    <button type="submit" class="btn btn-primary">Confirm Re-Issue</button>
+    <a href="@Url.Action("ViewIssuedBooks", "Reader")" class="btn btn-secondary">Cancel</a>
+</form>

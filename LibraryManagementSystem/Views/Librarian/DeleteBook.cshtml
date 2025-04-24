@@ -1,0 +1,35 @@
+﻿@model LibraryManagementSystem.Models.Books.DeleteBookViewModel
+
+@{
+    ViewData["Title"] = "Delete Book";
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-danger text-white rounded-top-4">
+            <h3 class="mb-0"><i class="fas fa-trash-alt me-2"></i>Delete Book</h3>
+        </div>
+
+        <div class="card-body bg-light">
+            <p class="fs-5">Are you sure you want to delete the book <strong>"@Model.Title"</strong>?</p>
+
+            <form method="post">
+                <div class="mb-3">
+                    <label for="CopiesToDelete" class="form-label">Number of Copies to Delete</label>
+                    <input type="number" id="CopiesToDelete" name="copiesToDelete" class="form-control" value="1" min="1" max="@Model.TotalCopies" required />
+                    <div class="form-text text-muted">You can delete up to @Model.TotalCopies copies.</div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="submit" class="btn btn-danger px-4"><i class="fas fa-trash me-1"></i>Delete</button>
+                    <a href="@Url.Action("Index", "Librarian")" class="btn btn-outline-secondary px-4"><i class="fas fa-times me-1"></i>Cancel</a>
+                </div>
+            </form>
+
+            <hr class="mt-4" />
+            <p class="mt-2"><strong>Total Copies Available:</strong> @Model.TotalCopies</p>
+        </div>
+    </div>
+</div>

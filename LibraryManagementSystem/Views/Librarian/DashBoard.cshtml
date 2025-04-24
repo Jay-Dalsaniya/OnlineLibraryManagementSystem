@@ -1,0 +1,158 @@
+﻿@model LibraryManagementSystem.Models.Books.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Librarian Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="display-4">Librarian Dashboard</h2>
+        <p class="lead">Welcome, @User.Identity.Name! You have successfully logged in as a Librarian.</p>
+    </div>
+
+    <div class="mb-4 text-center">
+        <a href="@Url.Action("AddBook", "Librarian")" class="btn btn-lg btn-gradient-primary me-2">
+            <i class="bi bi-plus-circle"></i> Add New Book
+        </a>
+        <a href="@Url.Action("Index", "Librarian")" class="btn btn-lg btn-gradient-dark">
+            <i class="bi bi-eye"></i> View Books
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 animated fadeIn">
+        <div class="col">
+            <div class="card shadow-lg text-white bg-primary rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Books</h5>
+                    <p class="card-text fs-3">@Model.TotalBooks</p>
+                    <i class="bi bi-book" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of books in the library"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-lg text-white bg-warning rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Books Issued</h5>
+                    <p class="card-text fs-3">@Model.IssuedBooks</p>
+                    <i class="bi bi-arrow-up-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of books issued"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-lg text-white bg-danger rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Books Returned</h5>
+                    <p class="card-text fs-3">@Model.ReturnedBooks</p>
+                    <i class="bi bi-arrow-down-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of books returned"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+        <div class="col">
+            <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Issued Books</h5>
+                    <p class="card-text fs-3">@Model.TotalIssuedBooks</p>
+                    <i class="bi bi-clipboard-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently issued"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card shadow-lg text-white bg-success rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Returned Books</h5>
+                    <p class="card-text fs-3">@Model.TotalReturnedBooks</p>
+                    <i class="bi bi-clipboard-x" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books returned successfully"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+        <div class="col">
+            <div class="card shadow-lg text-white bg-dark rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Books Available</h5>
+                    <p class="card-text fs-3">@Model.AvailableBooks</p>
+                    <i class="bi bi-check-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently available for lending"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-lg text-white bg-secondary rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Authors</h5>
+                    <p class="card-text fs-3">@Model.TotalAuthors</p>
+                    <i class="bi bi-person-lines-fill" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of authors in the library"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-lg text-white bg-warning rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Penalties</h5>
+                    <p class="card-text fs-3">@Model.Penalties.ToString("C")</p>
+                    <i class="bi bi-credit-card" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total penalties incurred by readers"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+        <div class="col">
+            <div class="card shadow-lg text-white bg-success rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Books Sold</h5>
+                    <p class="card-text fs-3">@Model.TotalBooksSold</p>
+                    <i class="bi bi-cart-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total books sold"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Sales</h5>
+                    <p class="card-text fs-3">@Model.TotalSales.ToString("C")</p>
+                    <i class="bi bi-wallet" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total revenue from book sales"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-hover:hover {
+        transform: translateY(-10px);
+        box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-gradient-primary {
+        background: linear-gradient(to right, #FF6A00, #FF4500);
+        color: white;
+    }
+
+    .btn-gradient-dark {
+        background: linear-gradient(to right, #343A40, #6C757D);
+        color: white;
+    }
+
+    .animated {
+        animation-duration: 2s;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

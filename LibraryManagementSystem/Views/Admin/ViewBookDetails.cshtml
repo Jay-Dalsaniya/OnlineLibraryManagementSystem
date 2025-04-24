@@ -1,0 +1,102 @@
+﻿@model LibraryManagementSystem.Models.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
+            <h2 class="text-center text-primary mb-4">@Model.Title</h2>
+
+            <div class="row">
+                <!-- Book Image Section -->
+                <div class="col-md-4 text-center mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                    {
+                        <img src="@Url.Content($"~{Model.ImagePath}")" alt="@Model.Title"
+                             class="img-fluid rounded shadow-sm border" style="max-height: 300px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <p class="text-muted">No image available</p>
+                    }
+                </div>
+
+                <!-- Book Details Section -->
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-sm-6 mb-2"><strong>Author:</strong> @Model.Author</div>
+                        <div class="col-sm-6 mb-2"><strong>ISBN:</strong> @Model.ISBN</div>
+                        <div class="col-sm-6 mb-2"><strong>Genre:</strong> @Model.Genre</div>
+                        <div class="col-sm-6 mb-2"><strong>Category:</strong> @Model.Category</div>
+                        <div class="col-sm-6 mb-2"><strong>Subject:</strong> @Model.Subject</div>
+                        <div class="col-sm-6 mb-2"><strong>Language:</strong> @Model.Language</div>
+                        <div class="col-sm-6 mb-2"><strong>Edition:</strong> @Model.Edition</div>
+                        <div class="col-sm-6 mb-2"><strong>Published:</strong> @Model.PublishedDate.ToString("dd-MM-yyyy")</div>
+                        <div class="col-sm-6 mb-2"><strong>Price:</strong> <span class="text-success fw-bold">@Model.Price.ToString("C")</span></div>
+                        <div class="col-sm-6 mb-2"><strong>Total Copies:</strong> @Model.TotalCopies</div>
+                    </div>
+
+                    <hr />
+                    <p><strong>Summary:</strong> @Model.Summary</p>
+
+                    <!-- Availability -->
+                    <div class="alert alert-info mt-3">
+                        <strong>Available Copies:</strong>
+                        @(Model.TotalCopies - Model.BookRentals.Count(r => !r.ReturnDate.HasValue))
+                    </div>
+
+                    <!-- Issued Books -->
+                    <h5 class="text-secondary mt-4"><i class="bi bi-box-arrow-right"></i> Issued Books</h5>
+                    @if (Model.BookRentals.Any(r => !r.ReturnDate.HasValue))
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var rental in Model.BookRentals.Where(r => !r.ReturnDate.HasValue))
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="@Url.Action("ViewUserDetails", "Admin", new { userId = rental.User.Id })" class="fw-semibold">
+                                        @rental.User.FirstName @rental.User.LastName
+                                    </a>
+                                    <span class="badge bg-primary rounded-pill">Rented: @rental.RentDate.ToString("dd-MM-yyyy")</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No active rentals for this book.</p>
+                    }
+
+                    <!-- Purchases -->
+                    <h5 class="text-secondary mt-4"><i class="bi bi-cart-check-fill"></i> Purchases</h5>
+                    @if (Model.BookPurchases.Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var purchase in Model.BookPurchases)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="@Url.Action("ViewUserDetails", "Admin", new { userId = purchase.User.Id })" class="fw-semibold">
+                                        @purchase.User.FirstName @purchase.User.LastName
+                                    </a>
+                                    <span class="badge bg-success rounded-pill">Purchased: @purchase.PurchaseDate.ToString("dd-MM-yyyy")</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No purchases for this book.</p>
+                    }
+
+                    <!-- Back Button -->
+                    <div class="mt-4 text-end">
+                        <a href="@Url.Action("ViewAllBooks", "Admin")" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i> Back to All Books
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

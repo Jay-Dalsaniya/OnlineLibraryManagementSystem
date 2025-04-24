@@ -1,0 +1,84 @@
+﻿@model LibraryManagementSystem.Models.Books.TransactionsViewModel
+
+@{
+    ViewData["Title"] = "All Transactions";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">📊 All Transactions</h2>
+
+    <!-- Summary Cards -->
+    <div class="row mb-5">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-lg text-white bg-danger h-100">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <h4 class="card-title">Total Late Fees</h4>
+                    <h2 class="display-5">@Model.TotalLateFees.ToString("C")</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-lg text-white bg-success h-100">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                    <h4 class="card-title">Total Sales</h4>
+                    <h2 class="display-5">@Model.TotalPurchaseAmount.ToString("C")</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rentals Table -->
+    <h3 class="text-primary">📚 Rentals</h3>
+    <div class="table-responsive mb-5" style="max-height: 420px; overflow-y: auto;">
+        <table class="table table-bordered table-striped mb-0">
+            <thead class="table-dark sticky-top" style="top: 0;">
+                <tr>
+                    <th>User</th>
+                    <th>Book</th>
+                    <th>Late Fee</th>
+                    <th>Rent Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var rental in Model.AllRentals)
+                {
+                    <tr>
+                        <td>@rental.User.FirstName @rental.User.LastName</td>
+                        <td>@rental.Book.Title</td>
+                        <td class="@(rental.LateFee.HasValue && rental.LateFee.Value > 0 ? "text-danger fw-bold" : "")">
+                            @(rental.LateFee.HasValue ? rental.LateFee.Value.ToString("C") : "N/A")
+                        </td>
+                        <td>@rental.RentDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Purchases Table -->
+    <h3 class="text-success">🛒 Purchases</h3>
+    <div class="table-responsive mb-5" style="max-height: 420px; overflow-y: auto;">
+        <table class="table table-bordered table-striped mb-0">
+            <thead class="table-dark sticky-top" style="top: 0;">
+                <tr>
+                    <th>User</th>
+                    <th>Book</th>
+                    <th>Price</th>
+                    <th>Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var purchase in Model.AllPurchases)
+                {
+                    <tr>
+                        <td>@purchase.User.FirstName @purchase.User.LastName</td>
+                        <td>@purchase.Book.Title</td>
+                        <td class="text-success fw-semibold">@purchase.Price.ToString("C")</td>
+                        <td>@purchase.PurchaseDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

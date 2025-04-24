@@ -1,0 +1,75 @@
+﻿@using X.PagedList
+@model IPagedList<LibraryManagementSystem.Models.Book>
+
+<div class="container mt-4">
+    <h2>Available Books for Purchase</h2>
+
+    <form method="get" class="mb-3 row g-3 align-items-center">
+        <div class="col-auto">
+            <input type="text" name="searchTerm" value="@ViewData["SearchTerm"]" class="form-control" placeholder="Search by Title or Author" />
+        </div>
+        <div class="col-auto">
+            <input type="number" name="minPrice" value="@ViewData["MinPrice"]" class="form-control" placeholder="Min Price" step="0.01" />
+        </div>
+        <div class="col-auto">
+            <input type="number" name="maxPrice" value="@ViewData["MaxPrice"]" class="form-control" placeholder="Max Price" step="0.01" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    @if (!Model.Any())
+    {
+        <p>No books available for purchase.</p>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Copies Available</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td>@book.Title</td>
+                        <td>@book.Author</td>
+                        <td>@book.Price.ToString("C")</td>
+                        <td>@book.AvailableCopies</td>
+
+                        <td>
+                            @if (book.AvailableCopies > 0)
+                            {
+                                <a href="@Url.Action("BuyBook", "Reader", new { bookId = book.BookId })" class="btn btn-success">Buy</a>
+                            }
+                            else
+                            {
+                                <span class="text-danger">Not Available</span>
+                            }
+
+                            <a href="@Url.Action("BookDetails", "Reader", new { bookId = book.BookId })" class="btn btn-info ml-2">View Book</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between mt-4">
+            @if (Model.HasPreviousPage)
+            {
+                <a href="@Url.Action("AvailableBooks", new { page = Model.PageNumber - 1, searchTerm = ViewData["SearchTerm"], minPrice = ViewData["MinPrice"], maxPrice = ViewData["MaxPrice"] })" class="btn btn-primary">Previous</a>
+            }
+            @if (Model.HasNextPage)
+            {
+                <a href="@Url.Action("AvailableBooks", new { page = Model.PageNumber + 1, searchTerm = ViewData["SearchTerm"], minPrice = ViewData["MinPrice"], maxPrice = ViewData["MaxPrice"] })" class="btn btn-primary">Next</a>
+            }
+        </div>
+    }
+</div>

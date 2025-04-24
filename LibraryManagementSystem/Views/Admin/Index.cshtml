@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Admin Book Details";
+    var bookDetails = ViewBag.BookDetails as List<LibraryManagementSystem.Models.Role.AdminBookDetailViewModel>;
+}
+
+<h2 class="mb-4">Admin Book Details</h2>
+
+<table class="table table-bordered table-hover" id="bookTable">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                Title
+                <input type="text" id="filterTitle" class="form-control form-control-sm mt-2" placeholder="Filter by Title">
+            </th>
+            <th>
+                Total Copies
+                <input type="number" id="filterTotal" class="form-control form-control-sm mt-2" placeholder="Filter">
+            </th>
+            <th>
+                Author
+                <input type="text" id="filterAuthor" class="form-control form-control-sm mt-2" placeholder="Filter by Author">
+            </th>
+            <th>
+                Publisher
+                <input type="text" id="filterPublisher" class="form-control form-control-sm mt-2" placeholder="Filter by Publisher">
+            </th>
+            <th>
+                ISBN
+                <input type="text" id="filterISBN" class="form-control form-control-sm mt-2" placeholder="Filter by ISBN">
+            </th>
+            <th>
+                Category
+                <input type="text" id="filterCategory" class="form-control form-control-sm mt-2" placeholder="Filter by Category">
+            </th>
+            <th>
+                Issued
+                <input type="number" id="filterIssued" class="form-control form-control-sm mt-2" placeholder="Filter">
+            </th>
+            <th>
+                Returned
+                <input type="number" id="filterReturned" class="form-control form-control-sm mt-2" placeholder="Filter">
+            </th>
+            <th>
+                Purchased
+                <input type="number" id="filterPurchased" class="form-control form-control-sm mt-2" placeholder="Filter">
+            </th>
+            <th>
+                Available
+                <input type="number" id="filterAvailable" class="form-control form-control-sm mt-2" placeholder="Filter">
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in bookDetails)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.TotalCopies</td>
+                <td>@book.Author</td>
+                <td>@book.Publisher</td>
+                <td>@book.ISBN</td>
+                <td>@book.Category</td>
+                <td>@book.IssuedCount</td>
+                <td>@book.ReturnedCount</td>
+                <td>@book.PurchasedCount</td>
+                <td>@book.AvailableCount</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("input").on("input", function () {
+                filterTable();
+            });
+
+            function filterTable() {
+                var titleFilter = $('#filterTitle').val().toLowerCase();
+                var totalFilter = $('#filterTotal').val();
+                var issuedFilter = $('#filterIssued').val();
+                var returnedFilter = $('#filterReturned').val();
+                var purchasedFilter = $('#filterPurchased').val();
+                var availableFilter = $('#filterAvailable').val();
+                var authorFilter = $('#filterAuthor').val().toLowerCase();
+                var publisherFilter = $('#filterPublisher').val().toLowerCase();
+                var isbnFilter = $('#filterISBN').val().toLowerCase();
+                var categoryFilter = $('#filterCategory').val().toLowerCase();
+
+                $('#bookTable tbody tr').each(function () {
+                    var row = $(this);
+                    var showRow = true;
+
+                    var title = row.find('td').eq(0).text().toLowerCase();
+                    var total = row.find('td').eq(1).text();
+                    var author = row.find('td').eq(2).text().toLowerCase();
+                    var publisher = row.find('td').eq(3).text().toLowerCase();
+                    var isbn = row.find('td').eq(4).text().toLowerCase();
+                    var category = row.find('td').eq(5).text().toLowerCase();
+                    var issued = row.find('td').eq(6).text();
+                    var returned = row.find('td').eq(7).text();
+                    var purchased = row.find('td').eq(8).text();
+                    var available = row.find('td').eq(9).text();
+
+                    if (titleFilter && !title.includes(titleFilter)) showRow = false;
+                    if (totalFilter && total !== totalFilter) showRow = false;
+                    if (issuedFilter && issued !== issuedFilter) showRow = false;
+                    if (returnedFilter && returned !== returnedFilter) showRow = false;
+                    if (purchasedFilter && purchased !== purchasedFilter) showRow = false;
+                    if (availableFilter && available !== availableFilter) showRow = false;
+                    if (authorFilter && !author.includes(authorFilter)) showRow = false;
+                    if (publisherFilter && !publisher.includes(publisherFilter)) showRow = false;
+                    if (isbnFilter && !isbn.includes(isbnFilter)) showRow = false;
+                    if (categoryFilter && !category.includes(categoryFilter)) showRow = false;
+
+                    row.toggle(showRow);
+                });
+            }
+        });
+    </script>
+}
+
