@@ -53,6 +53,7 @@ Open the solution file `OnlineLibraryManagementSystem.sln` in Visual Studio.
 
 Update the `appsettings.json` file with your SQL Server connection string:
 
+```json
 "ConnectionStrings": {
   "DefaultConnection": "Server=YOUR_SERVER;Database=LibraryDB;Trusted_Connection=True;"
 }
@@ -71,10 +72,9 @@ Update-Database
 Press `F5` or click on the "Start" button in Visual Studio to run the application.
 
 
-
 ## 👥 Contributors
 - Jay Dalsaniya
-
+- [Add other contributors here]
 
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).
