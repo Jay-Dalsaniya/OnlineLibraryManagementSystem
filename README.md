@@ -74,7 +74,6 @@ Press `F5` or click on the "Start" button in Visual Studio to run the applicatio
 
 ## 👥 Contributors
 - Jay Dalsaniya
-- [Add other contributors here]
 
 ## 📄 License
 This project is licensed under the [MIT License](LICENSE).
