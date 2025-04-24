@@ -45,3 +45,308 @@ VALUES
 ('Digital Transformation', 'Ravi Agarwal', '9788899001122', 999.00, '2021-09-10', 'Technology', 'Textbook', 'Business', 'New', 'Exploring the impact of digital transformation on business.', 18, 'English', 'Revised', 'Tech World', 'Manan', GETDATE(), GETDATE(), 'Manan', '/images/books/b22.jpg', 18, GETDATE(), 1, 0, 4.7),
 ('Psychology of Emotions', 'Priya Reddy', '9789900112233', 599.00, '2020-06-20', 'Psychology', 'Textbook', 'Emotions', 'Used', 'A deep dive into understanding human emotions.', 8, 'English', '1st', 'Mind Books', 'Manan', GETDATE(), GETDATE(), 'Manan', '/images/books/b23.jpg', 8, GETDATE(), 1, 0, 4.4),
 ('The Future of Technology', 'Karan Mehta', '9781000113344', 1299.00, '2023-03-05', 'Technology', 'Textbook', 'Innovation', 'New', 'A look at the future of technology and its impact on society.', 25, 'English', '1st', 'Tech Innovations', 'Manan', GETDATE(), GETDATE(), 'Manan', '/images/books/b24.jpg', 25, GETDATE(), 1, 0, 4.9);
+
+
+
+
+USE [LibraryManagementSystem]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BookRentals](
+	[BookRentalId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[BookId] [int] NOT NULL,
+	[RentDate] [datetime2](7) NOT NULL,
+	[ReturnDate] [datetime2](7) NULL,
+	[DueDate] [datetime2](7) NOT NULL,
+	[LateFee] [decimal](18, 2) NULL,
+	[BookCondition] [nvarchar](50) NOT NULL,
+	[CreatedDate] [datetime2](7) NOT NULL,
+	[ModifiedDate] [datetime2](7) NULL,
+	[RentalStatus] [nvarchar](20) NOT NULL,
+	[ModifiedBy] [nvarchar](100) NULL,
+	[Author] [nvarchar](100) NOT NULL,
+	[Category] [nvarchar](max) NOT NULL,
+	[Edition] [nvarchar](max) NOT NULL,
+	[Genre] [nvarchar](max) NOT NULL,
+	[ISBN] [nvarchar](13) NOT NULL,
+	[Language] [nvarchar](max) NOT NULL,
+	[Price] [decimal](18, 2) NOT NULL,
+	[PublishedDate] [datetime2](7) NOT NULL,
+	[Subject] [nvarchar](max) NOT NULL,
+	[Summary] [nvarchar](max) NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[TotalCopies] [int] NOT NULL,
+	[ReaderId] [int] NOT NULL,
+	[Fine] [decimal](18, 2) NULL,
+	[RentalFee] [decimal](18, 2) NOT NULL,
+ CONSTRAINT [PK_BookRentals] PRIMARY KEY CLUSTERED 
+(
+	[BookRentalId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [DueDate]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [BookCondition]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [CreatedDate]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [RentalStatus]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Author]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Category]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Edition]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Genre]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [ISBN]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Language]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ((0.0)) FOR [Price]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [PublishedDate]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Subject]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Summary]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT (N'') FOR [Title]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ((0)) FOR [TotalCopies]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ((0)) FOR [ReaderId]
+GO
+
+ALTER TABLE [dbo].[BookRentals] ADD  DEFAULT ((0.0)) FOR [RentalFee]
+GO
+
+ALTER TABLE [dbo].[BookRentals]  WITH CHECK ADD  CONSTRAINT [FK_BookRentals_Books_BookId] FOREIGN KEY([BookId])
+REFERENCES [dbo].[Books] ([BookId])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BookRentals] CHECK CONSTRAINT [FK_BookRentals_Books_BookId]
+GO
+
+ALTER TABLE [dbo].[BookRentals]  WITH CHECK ADD  CONSTRAINT [FK_BookRentals_Users_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[Users] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BookRentals] CHECK CONSTRAINT [FK_BookRentals_Users_UserId]
+GO
+
+
+
+
+
+USE [LibraryManagementSystem]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[BookPurchases](
+	[BookPurchaseId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[BookId] [int] NOT NULL,
+	[PurchaseDate] [datetime2](7) NOT NULL,
+	[Price] [decimal](18, 2) NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[Author] [nvarchar](100) NOT NULL,
+	[ISBN] [nvarchar](13) NOT NULL,
+	[Genre] [nvarchar](50) NOT NULL,
+	[Category] [nvarchar](50) NOT NULL,
+	[Subject] [nvarchar](50) NOT NULL,
+	[Summary] [nvarchar](500) NOT NULL,
+	[TotalCopies] [int] NOT NULL,
+	[Language] [nvarchar](50) NOT NULL,
+	[Edition] [nvarchar](50) NOT NULL,
+ CONSTRAINT [PK_BookPurchases] PRIMARY KEY CLUSTERED 
+(
+	[BookPurchaseId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[BookPurchases]  WITH CHECK ADD  CONSTRAINT [FK_BookPurchases_Books_BookId] FOREIGN KEY([BookId])
+REFERENCES [dbo].[Books] ([BookId])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BookPurchases] CHECK CONSTRAINT [FK_BookPurchases_Books_BookId]
+GO
+
+ALTER TABLE [dbo].[BookPurchases]  WITH CHECK ADD  CONSTRAINT [FK_BookPurchases_Users_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[Users] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[BookPurchases] CHECK CONSTRAINT [FK_BookPurchases_Users_UserId]
+GO
+
+
+
+
+
+USE [LibraryManagementSystem]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Books](
+	[BookId] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](200) NOT NULL,
+	[Author] [nvarchar](100) NOT NULL,
+	[ISBN] [nvarchar](13) NOT NULL,
+	[Price] [decimal](18, 2) NOT NULL,
+	[PublishedDate] [datetime2](7) NOT NULL,
+	[CreatedBy] [nvarchar](max) NOT NULL,
+	[CreateDate] [datetime2](7) NOT NULL,
+	[ModifyBy] [nvarchar](max) NOT NULL,
+	[ModifyDate] [datetime2](7) NOT NULL,
+	[ImagePath] [nvarchar](255) NULL,
+	[AvailableCopies] [int] NOT NULL,
+	[DateAdded] [datetime2](7) NOT NULL,
+	[Edition] [nvarchar](max) NOT NULL,
+	[Genre] [nvarchar](max) NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+	[Language] [nvarchar](max) NOT NULL,
+	[Publisher] [nvarchar](max) NOT NULL,
+	[Rating] [float] NOT NULL,
+	[TotalCopies] [int] NOT NULL,
+	[Category] [nvarchar](max) NOT NULL,
+	[Condition] [nvarchar](max) NOT NULL,
+	[Subject] [nvarchar](max) NOT NULL,
+	[Summary] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_Books] PRIMARY KEY CLUSTERED 
+(
+	[BookId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT ((0)) FOR [AvailableCopies]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [DateAdded]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Edition]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Genre]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (CONVERT([bit],(0))) FOR [IsDeleted]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Language]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Publisher]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT ((0.0000000000000000e+000)) FOR [Rating]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT ((0)) FOR [TotalCopies]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Category]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Condition]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Subject]
+GO
+
+ALTER TABLE [dbo].[Books] ADD  DEFAULT (N'') FOR [Summary]
+GO
+
+
+
+
+
+
+USE [LibraryManagementSystem]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [nvarchar](max) NOT NULL,
+	[LastName] [nvarchar](max) NOT NULL,
+	[Email] [nvarchar](max) NOT NULL,
+	[Password] [nvarchar](max) NOT NULL,
+	[ImageName] [nvarchar](max) NOT NULL,
+	[CreatedDate] [datetime2](7) NOT NULL,
+	[Address] [nvarchar](max) NOT NULL,
+	[Birthday] [datetime2](7) NOT NULL,
+	[Gender] [nvarchar](max) NOT NULL,
+	[PhoneNumber] [nvarchar](max) NOT NULL,
+	[Role] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (N'') FOR [Address]
+GO
+
+ALTER TABLE [dbo].[Users] ADD  DEFAULT ('0001-01-01T00:00:00.0000000') FOR [Birthday]
+GO
+
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (N'') FOR [Gender]
+GO
+
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (N'') FOR [PhoneNumber]
+GO
+
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (N'') FOR [Role]
+GO
+
+
+
