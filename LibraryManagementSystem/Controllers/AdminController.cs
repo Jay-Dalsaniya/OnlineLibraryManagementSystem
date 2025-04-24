@@ -152,9 +152,47 @@ namespace LibraryManagementSystem.Controllers
             }
 
             return View(book); 
-
-
         }
+        public IActionResult ManageUsers(string search)
+        {
+            var users = _context.Users
+                .Where(u => u.Role != "Admin")
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                users = users.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search) || u.Email.Contains(search));
+            }
+
+            return View(users.ToList());
+        }
+
+
+
+        [HttpPost]
+        public IActionResult DeactivateUser(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            if (user != null)
+            {
+                user.IsActive = false;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ManageUsers");
+        }
+
+        [HttpPost]
+        public IActionResult ReactivateUser(int userId)
+        {
+            var user = _context.Users.Find(userId);
+            if (user != null)
+            {
+                user.IsActive = true;
+                _context.SaveChanges();
+            }
+            return RedirectToAction("ManageUsers");
+        }
+
     }
 }
     

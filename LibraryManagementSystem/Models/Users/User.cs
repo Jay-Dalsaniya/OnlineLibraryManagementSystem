@@ -44,6 +44,7 @@ namespace LibraryManagementSystem.Models
         public string Gender { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public bool IsActive { get; set; } = true;
 
         public ICollection<BookRental> BookRentals { get; set; }
 

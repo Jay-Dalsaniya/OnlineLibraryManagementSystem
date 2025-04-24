@@ -31,10 +31,23 @@ public class AccountController : Controller
         var existingUser = await _context.Users
             .FirstOrDefaultAsync(u => u.Email.ToLower() == user.Email.ToLower());
 
+        //if (existingUser != null)
+        //{
+        //    ModelState.AddModelError("Email", "An account with this email already exists.");
+        //    return View(user);
+        //}
         if (existingUser != null)
         {
-            ModelState.AddModelError("Email", "An account with this email already exists.");
-            return View(user);
+            if (existingUser.IsActive == false)
+            {
+                ModelState.AddModelError("Email", "This email is already associated with a deactivated account. Please contact support.");
+                return View(user);
+            }
+            else
+            {
+                ModelState.AddModelError("Email", "An account with this email already exists.");
+                return View(user);
+            }
         }
 
         user.CreatedDate = DateTime.UtcNow;
@@ -137,14 +150,12 @@ public class AccountController : Controller
 
         return RedirectToAction("Login", "Account");
     }
-
-
     [HttpGet]
     public IActionResult Login()
     {
         return View();
     }
-  
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
@@ -152,14 +163,15 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == model.Email.ToLower());
-            if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+
+            if (user != null && user.IsActive && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.FirstName),
                 new Claim("FullName", $"{user.FirstName} {user.LastName}"),
                 new Claim("UserId", user.Id.ToString()),
-                new Claim("Role", user.Role)  // Add role claim here
+                new Claim("Role", user.Role)
             };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -171,20 +183,17 @@ public class AccountController : Controller
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
-                var role = User.FindFirst("Role")?.Value;
-                Console.WriteLine($"User role: {role}");
-
                 if (user.Role == "Reader")
                 {
-                    return RedirectToAction("Dashboard", "Reader"); 
+                    return RedirectToAction("Dashboard", "Reader");
                 }
                 else if (user.Role == "Librarian")
                 {
-                    return RedirectToAction("Dashboard", "Librarian"); 
+                    return RedirectToAction("Dashboard", "Librarian");
                 }
                 else if (user.Role == "Admin")
                 {
-                    return RedirectToAction("Dashboard", "Admin"); 
+                    return RedirectToAction("Dashboard", "Admin");
                 }
                 else
                 {
@@ -192,13 +201,80 @@ public class AccountController : Controller
                     return View(model);
                 }
             }
+            else if (user != null && !user.IsActive)
+            {
+                ModelState.AddModelError(string.Empty, "Your account has been deactivated by the admin.");
+            }
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid email or password.");
             }
         }
+
         return View(model);
     }
+
+
+    //[HttpGet]
+    //public IActionResult Login()
+    //{
+    //    return View();
+    //}
+
+    //[HttpPost]
+    //[ValidateAntiForgeryToken]
+    //public async Task<IActionResult> Login(LoginViewModel model)
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == model.Email.ToLower());
+    //        if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+    //        {
+    //            var claims = new List<Claim>
+    //        {
+    //            new Claim(ClaimTypes.Name, user.FirstName),
+    //            new Claim("FullName", $"{user.FirstName} {user.LastName}"),
+    //            new Claim("UserId", user.Id.ToString()),
+    //            new Claim("Role", user.Role)  // Add role claim here
+    //        };
+
+    //            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+    //            var authProperties = new AuthenticationProperties
+    //            {
+    //                IsPersistent = true,
+    //                ExpiresUtc = DateTime.UtcNow.AddHours(1)
+    //            };
+
+    //            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+    //            var role = User.FindFirst("Role")?.Value;
+    //            Console.WriteLine($"User role: {role}");
+
+    //            if (user.Role == "Reader")
+    //            {
+    //                return RedirectToAction("Dashboard", "Reader"); 
+    //            }
+    //            else if (user.Role == "Librarian")
+    //            {
+    //                return RedirectToAction("Dashboard", "Librarian"); 
+    //            }
+    //            else if (user.Role == "Admin")
+    //            {
+    //                return RedirectToAction("Dashboard", "Admin"); 
+    //            }
+    //            else
+    //            {
+    //                ModelState.AddModelError(string.Empty, "Invalid role.");
+    //                return View(model);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            ModelState.AddModelError(string.Empty, "Invalid email or password.");
+    //        }
+    //    }
+    //    return View(model);
+    //}
 
 
     [Authorize]
