@@ -1,7 +1,3 @@
-Certainly! Here's a comprehensive `README.md` file tailored for your **Online Library Management System** project. This README provides an overview, setup instructions, features, and other essential details to help users and contributors understand and interact with your project effectively.
-
----
-
 # 📚 Online Library Management System
 An ASP.NET Core MVC web application designed to streamline library operations, including book rentals, returns, and user management
 
