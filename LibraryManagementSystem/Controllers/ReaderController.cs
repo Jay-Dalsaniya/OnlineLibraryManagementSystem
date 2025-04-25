@@ -182,7 +182,7 @@ namespace LibraryManagementSystem.Controllers
             }
 
             var rentalDate = rental.RentDate;
-            var dueDate = rentalDate.AddDays(7);
+            var dueDate = rentalDate.AddDays(0);
             var currentDate = DateTime.Now;
 
             var lateFee = 0m;
