@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    .about-container {
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to right, #f0f4f8, #ffffff);
+        padding: 50px;
+        border-radius: 15px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        max-width: 1100px;
+        margin: auto;
+    }
+
+        .about-container h1,
+        .about-container h2 {
+            color: #0d6efd;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .about-container p {
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+    .team-members {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        flex-wrap: wrap;
+    }
+
+    .team-member {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(13, 110, 253, 0.1);
+        width: 280px;
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .team-member:hover {
+            transform: translateY(-10px);
+        }
+
+        .team-member img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 4px solid #0d6efd;
+        }
+
+        .team-member h3 {
+            margin-bottom: 8px;
+            color: #0d6efd;
+            font-weight: 700;
+        }
+
+        .team-member p {
+            color: #555;
+        }
+</style>
+
+<div class="about-container">
+    <h1>Contact Us</h1>
+    <p>If you have any questions or need support, please reach out to our team below.</p>
+
+    <section class="team">
+        <h2>Meet the Team</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <img src="~/images/jay profile _bb91bdd7-bd88-4ce8-81c4-058eb3d5117b.jpg" alt="Jay Dalsaniya" />
+                <h3>Jay Dalsaniya</h3>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="team-member">
+                <img src="~/images/mananpic_9441a88b-9186-432d-9ac4-d67ac9149af8.jpg" alt="Manan Varmora" />
+                <h3>Manan Varmora</h3>
+                <p>Founder & CTO</p>
+            </div>
+        </div>
+    </section>
+</div>
