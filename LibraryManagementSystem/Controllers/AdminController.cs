@@ -1,9 +1,12 @@
 ﻿using LibraryManagementSystem.Models;
+using LibraryManagementSystem.Models.Books;
 using LibraryManagementSystem.Models.Role;
 using LibraryManagementSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
+using X.PagedList.Extensions;
 
 namespace LibraryManagementSystem.Controllers
 {
@@ -13,49 +16,96 @@ namespace LibraryManagementSystem.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
 
-
-        public AdminController(ApplicationDbContext context , IEmailSender emailSender)
+        public AdminController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
             _emailSender = emailSender;
 
         }
 
-        public IActionResult Index()
+        // Index Action
+        //public async Task<IActionResult> Index()
+        //{
+        //    var dashboardData = new DashboardViewModel
+        //    {
+        //        TotalBooks = await _context.Books.CountAsync(),
+        //        IssuedBooks = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
+        //        ReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue),
+        //        AvailableBooks = await _context.Books.SumAsync(b => b.TotalCopies) - await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
+        //        TotalAuthors = await _context.Books.Select(b => b.Author).Distinct().CountAsync(),
+        //        TotalUsers = await _context.Users.CountAsync(),
+        //        TotalSales = await _context.BookPurchases.SumAsync(bp => bp.Price),
+        //        TotalBookPurchases = await _context.BookPurchases.CountAsync()
+        //    };
+
+        //    return View(dashboardData);
+        //}
+
+        public async Task<IActionResult> Index()
         {
-            var role = User.FindFirst("Role")?.Value;
-            Console.WriteLine($"User role: {role}");
-
-            var books = _context.Books
-                .Include(b => b.BookRentals) 
-                .Include(b => b.BookPurchases) 
-                .ToList();
-
-            var bookDetails = books.Select(b => new AdminBookDetailViewModel
+            var dashboardData = new DashboardViewModel
             {
-                BookId = b.BookId,
-                Title = b.Title,
-                Author = b.Author,
-                Publisher = b.Publisher,
-                ISBN = b.ISBN,
-                Category = b.Category,
-                TotalCopies = b.TotalCopies,
-                IssuedCount = b.BookRentals.Count(r => !r.ReturnDate.HasValue), 
-                ReturnedCount = b.BookRentals.Count(r => r.ReturnDate.HasValue), 
-                PurchasedCount = b.BookPurchases.Count(),
-                AvailableCount = b.TotalCopies - b.BookRentals.Count(r => !r.ReturnDate.HasValue)
-            }).ToList();
+                // Basic Data
+                TotalBooks = await _context.Books.CountAsync(),
+                IssuedBooks = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
+                ReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue),
+                AvailableBooks = await _context.Books.SumAsync(b => b.TotalCopies) - await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
+                TotalAuthors = await _context.Books.Select(b => b.Author).Distinct().CountAsync(),
+                TotalUsers = await _context.Users
+                            .Where(u => u.Role != "Admin" && u.Role != "Librarian")
+                            .CountAsync(),
+                // Sales and Purchases Data
+                TotalSales = await _context.BookPurchases.SumAsync(bp => bp.Price),
+                TotalBooksSold = await _context.BookPurchases.CountAsync(),
+                TotalBookPurchases = await _context.BookPurchases.CountAsync(),
 
-            ViewBag.BookDetails = bookDetails;
+                // Additional Metrics
+                ActiveTransactions = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue), // Active Rentals
+                OverdueBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue && br.DueDate < DateTime.Now && !br.ReturnDate.HasValue), // Overdue Rentals
+                TotalLateFees = await _context.BookRentals.Where(br => br.LateFee.HasValue).SumAsync(br => br.LateFee.Value), // Sum of all late fees
+                TotalReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue), // Books Returned
+                TotalBooksInStock = await _context.Books.SumAsync(b => b.TotalCopies) // Total stock in the library
+            };
 
-            return View();
+            return View(dashboardData);
         }
 
+
+
+        //public IActionResult Index()
+        //{
+        //    var role = User.FindFirst("Role")?.Value;
+        //    Console.WriteLine($"User role: {role}");
+
+        //    var books = _context.Books
+        //        .Include(b => b.BookRentals) 
+        //        .Include(b => b.BookPurchases) 
+        //        .ToList();
+
+        //    var bookDetails = books.Select(b => new AdminBookDetailViewModel
+        //    {
+        //        BookId = b.BookId,
+        //        Title = b.Title,
+        //        Author = b.Author,
+        //        Publisher = b.Publisher,
+        //        ISBN = b.ISBN,
+        //        Category = b.Category,
+        //        TotalCopies = b.TotalCopies,
+        //        IssuedCount = b.BookRentals.Count(r => !r.ReturnDate.HasValue), 
+        //        ReturnedCount = b.BookRentals.Count(r => r.ReturnDate.HasValue), 
+        //        PurchasedCount = b.BookPurchases.Count(),
+        //        AvailableCount = b.TotalCopies - b.BookRentals.Count(r => !r.ReturnDate.HasValue)
+        //    }).ToList();
+
+        //    ViewBag.BookDetails = bookDetails;
+
+        //    return View();
+        //}
 
         public IActionResult Dashboard()
         {
             var role = User.FindFirst("Role")?.Value;
-            Console.WriteLine($"User role: {role}");  
+            Console.WriteLine($"User role: {role}");
 
             if (role == "Admin")
             {
@@ -72,7 +122,7 @@ namespace LibraryManagementSystem.Controllers
         public IActionResult ViewAllUsers()
         {
             var users = _context.Users
-                .Where(u => u.Role != "Admin") 
+                .Where(u => u.Role != "Admin")
                 .Select(u => new UserViewModel
                 {
                     Id = u.Id,
@@ -111,17 +161,15 @@ namespace LibraryManagementSystem.Controllers
             return View(bookDetails);
         }
 
-
-
         [HttpGet]
         public IActionResult ViewUserDetails(int userId)
         {
             var user = _context.Users
-                .Include(u => u.BookRentals) 
-                    .ThenInclude(br => br.Book) 
-                .Include(u => u.BookPurchases) 
-                    .ThenInclude(bp => bp.Book) 
-                .FirstOrDefault(u => u.Id == userId); 
+                .Include(u => u.BookRentals)
+                    .ThenInclude(br => br.Book)
+                .Include(u => u.BookPurchases)
+                    .ThenInclude(bp => bp.Book)
+                .FirstOrDefault(u => u.Id == userId);
 
             if (user == null)
             {
@@ -132,71 +180,33 @@ namespace LibraryManagementSystem.Controllers
             if (user.Role == "Librarian")
             {
                 var uploadedBooks = _context.Books
-                    .Where(b => b.CreatedBy == user.FirstName) 
+                    .Where(b => b.CreatedBy == user.FirstName)
                     .ToList();
 
                 ViewBag.UploadedBooks = uploadedBooks;
             }
 
-            return View(user); 
+            return View(user);
         }
         [HttpGet]
         public IActionResult ViewBookDetails(int bookId)
         {
             var book = _context.Books
-                .Include(b => b.BookRentals) 
+                .Include(b => b.BookRentals)
                     .ThenInclude(br => br.User)
-                .Include(b => b.BookPurchases) 
-                    .ThenInclude(bp => bp.User) 
-                .FirstOrDefault(b => b.BookId == bookId); 
+                .Include(b => b.BookPurchases)
+                    .ThenInclude(bp => bp.User)
+                .FirstOrDefault(b => b.BookId == bookId);
 
             if (book == null)
             {
                 TempData["ErrorMessage"] = "Book not found.";
-                return RedirectToAction("ViewAllBooks"); 
+                return RedirectToAction("ViewAllBooks");
             }
 
-            return View(book); 
+            return View(book);
         }
-        //public IActionResult ManageUsers(string search)
-        //{
-        //    var users = _context.Users
-        //        .Where(u => u.Role != "Admin")
-        //        .AsQueryable();
 
-        //    if (!string.IsNullOrEmpty(search))
-        //    {
-        //        users = users.Where(u => u.FirstName.Contains(search) || u.LastName.Contains(search) || u.Email.Contains(search));
-        //    }
-
-        //    return View(users.ToList());
-        //}
-
-
-
-        //[HttpPost]
-        //public IActionResult DeactivateUser(int userId)
-        //{
-        //    var user = _context.Users.Find(userId);
-        //    if (user != null)
-        //    {
-        //        user.IsActive = false;
-        //        _context.SaveChanges();
-        //    }
-        //    return RedirectToAction("ManageUsers");
-        //}
-
-        //[HttpPost]
-        //public IActionResult ReactivateUser(int userId)
-        //{
-        //    var user = _context.Users.Find(userId);
-        //    if (user != null)
-        //    {
-        //        user.IsActive = true;
-        //        _context.SaveChanges();
-        //    }
-        //    return RedirectToAction("ManageUsers");
-        //}
         public IActionResult ManageUsers(string search)
         {
             var users = _context.Users
@@ -361,7 +371,6 @@ namespace LibraryManagementSystem.Controllers
             return RedirectToAction("ManageUsers");
         }
 
-
     }
 }
-    
+

@@ -1,123 +1,207 @@
-﻿@{
-    ViewBag.Title = "Admin Book Details";
-    var bookDetails = ViewBag.BookDetails as List<LibraryManagementSystem.Models.Role.AdminBookDetailViewModel>;
+﻿@model LibraryManagementSystem.Models.Books.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2 class="mb-4">Admin Book Details</h2>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="display-4 text-dark">Admin Dashboard</h2>
+        <p class="lead text-dark">Welcome, @User.Identity.Name! You have successfully logged in as an Admin.</p>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
 
-<table class="table table-bordered table-hover" id="bookTable">
-    <thead class="table-dark">
-        <tr>
-            <th>
-                Title
-                <input type="text" id="filterTitle" class="form-control form-control-sm mt-2" placeholder="Filter by Title">
-            </th>
-            <th>
-                Total Copies
-                <input type="number" id="filterTotal" class="form-control form-control-sm mt-2" placeholder="Filter">
-            </th>
-            <th>
-                Author
-                <input type="text" id="filterAuthor" class="form-control form-control-sm mt-2" placeholder="Filter by Author">
-            </th>
-            <th>
-                Publisher
-                <input type="text" id="filterPublisher" class="form-control form-control-sm mt-2" placeholder="Filter by Publisher">
-            </th>
-            <th>
-                ISBN
-                <input type="text" id="filterISBN" class="form-control form-control-sm mt-2" placeholder="Filter by ISBN">
-            </th>
-            <th>
-                Category
-                <input type="text" id="filterCategory" class="form-control form-control-sm mt-2" placeholder="Filter by Category">
-            </th>
-            <th>
-                Issued
-                <input type="number" id="filterIssued" class="form-control form-control-sm mt-2" placeholder="Filter">
-            </th>
-            <th>
-                Returned
-                <input type="number" id="filterReturned" class="form-control form-control-sm mt-2" placeholder="Filter">
-            </th>
-            <th>
-                Purchased
-                <input type="number" id="filterPurchased" class="form-control form-control-sm mt-2" placeholder="Filter">
-            </th>
-            <th>
-                Available
-                <input type="number" id="filterAvailable" class="form-control form-control-sm mt-2" placeholder="Filter">
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in bookDetails)
-        {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.TotalCopies</td>
-                <td>@book.Author</td>
-                <td>@book.Publisher</td>
-                <td>@book.ISBN</td>
-                <td>@book.Category</td>
-                <td>@book.IssuedCount</td>
-                <td>@book.ReturnedCount</td>
-                <td>@book.PurchasedCount</td>
-                <td>@book.AvailableCount</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Basic Info Cards -->
+        <!-- Books in Stock -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white bg-success h-100 card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Books in Stock</h5>
+                        <p class="card-text fs-2">@Model.TotalBooksInStock</p>
+                        <i class="bi bi-stack dashboard-icon" data-bs-toggle="tooltip" title="Total books available in the library"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Total Books -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+        <div class="col">
+            <div class="card shadow-lg text-white bg-primary h-100 card-hover">
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Total Books</h5>
+                    <p class="card-text fs-2">@Model.TotalBooks</p>
+                    <i class="bi bi-book dashboard-icon" data-bs-toggle="tooltip" title="Total number of books in the library"></i>
+                </div>
+            </div>
+        </div>
+        </a>
+        <!-- Books Issued -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white  card-hover" style="background-color: #ffc107;" h-100>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Books Issued</h5>
+                        <p class="card-text fs-2">@Model.IssuedBooks</p>
+                        <i class="bi bi-arrow-up-circle dashboard-icon" data-bs-toggle="tooltip" title="Total number of books issued"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Books Returned -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white card-hover" style="background-color: #dc3545;" h-100>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Books Returned</h5>
+                        <p class="card-text fs-2">@Model.ReturnedBooks</p>
+                        <i class="bi bi-arrow-down-circle dashboard-icon" data-bs-toggle="tooltip" title="Total number of books returned"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Total Users -->
+        <a href="@Url.Action("ViewAllUsers", "Admin")" class="text-decoration-none">
+        <div class="col">
+            <div class="card shadow-lg text-white card-hover" style="background-color: #28a745;" h-100>
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Total Reader</h5>
+                    <p class="card-text fs-2">@Model.TotalUsers</p>
+                    <i class="bi bi-person-fill dashboard-icon" data-bs-toggle="tooltip" title="Total number of users in the system"></i>
+                </div>
+            </div>
+        </div>
+        </a>
+
+        <!-- Total Authors -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white card-hover" style="background-color: #20c997;" h-100>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Total Authors</h5>
+                        <p class="card-text fs-2">@Model.TotalAuthors</p>
+                        <i class="bi bi-pencil dashboard-icon" data-bs-toggle="tooltip" title="Total number of authors in the library"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Active Transactions -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+        <div class="col">
+            <div class="card shadow-lg text-white card-hover" style="background-color: #17a2b8;" h-100 >
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Active Transactions</h5>
+                    <p class="card-text fs-2">@Model.ActiveTransactions</p>
+                    <i class="bi bi-arrow-right-circle dashboard-icon" data-bs-toggle="tooltip" title="Active transactions currently in process"></i>
+                </div>
+            </div>
+        </div>
+        </a>
+        <!-- Overdue Books -->
+                <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+        <div class="col">
+            <div class="card shadow-lg text-white card-hover" style="background-color: #fd7e14;" h-100 >
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Overdue Books</h5>
+                    <p class="card-text fs-2">@Model.OverdueBooks</p>
+                    <i class="bi bi-clock dashboard-icon" data-bs-toggle="tooltip" title="Books that are overdue for return"></i>
+                </div>
+            </div>
+        </div>
+    </a>
+    <!-- Fees and Stock -->
+        <!-- Total Books Sold -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white card-hover" style="background-color: #e83e8c;" h-100>
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Total Books Sold</h5>
+                        <p class="card-text fs-2">@Model.TotalBooksSold</p>
+                        <i class="bi bi-cart-check dashboard-icon" data-bs-toggle="tooltip" title="Total number of books sold"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Total Book Purchases -->
+        <a href="@Url.Action("ViewAllBooks", "Admin")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white bg-info h-100  card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title fs-4 fw-bold">Total Book Purchases</h5>
+                        <p class="card-text fs-2">@Model.TotalBookPurchases</p>
+                        <i class="bi bi-cart dashboard-icon" data-bs-toggle="tooltip" title="Total number of book purchases made"></i>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <!-- Late Fees -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+
+        <div class="col">
+            <div class="card shadow-lg text-white card-hover" style="background-color: #6f42c1;" h-100 >
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Total Late Fees</h5>
+                    <p class="card-text fs-2">@Model.TotalLateFees.ToString("C")</p>
+                    <i class="bi bi-wallet2 dashboard-icon" data-bs-toggle="tooltip" title="Total late fees incurred by users"></i>
+                </div>
+            </div>
+        </div>
+        </a>
+       
+        <!-- Total Sales -->
+        <a href="@Url.Action("ViewBookDetails", "Admin")" class="text-decoration-none">
+        <div class="col">
+            <div class="card shadow-lg text-white card-hover" style="background-color: #343a40;" h-100 >
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-4 fw-bold">Total Sales</h5>
+                    <p class="card-text fs-2">@Model.TotalSales.ToString("C")</p>
+                    <i class="bi bi-currency-dollar dashboard-icon" data-bs-toggle="tooltip" title="Total sales amount for book purchases"></i>
+                </div>
+            </div>
+        </div>
+        </a>
+
+    </div>
+</div>
+
+<!-- Styles -->
+<style>
+    .card-hover:hover {
+        transform: translateY(-15px);
+        box-shadow: 0px 25px 30px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .container {
+        background: linear-gradient(135deg, #f4f5f7, #d6e1e9);
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    h2 {
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .card-text {
+        font-weight: bold;
+    }
+
+    .dashboard-icon {
+        font-size: 60px;
+        margin-top: 10px;
+    }
+</style>
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $("input").on("input", function () {
-                filterTable();
-            });
-
-            function filterTable() {
-                var titleFilter = $('#filterTitle').val().toLowerCase();
-                var totalFilter = $('#filterTotal').val();
-                var issuedFilter = $('#filterIssued').val();
-                var returnedFilter = $('#filterReturned').val();
-                var purchasedFilter = $('#filterPurchased').val();
-                var availableFilter = $('#filterAvailable').val();
-                var authorFilter = $('#filterAuthor').val().toLowerCase();
-                var publisherFilter = $('#filterPublisher').val().toLowerCase();
-                var isbnFilter = $('#filterISBN').val().toLowerCase();
-                var categoryFilter = $('#filterCategory').val().toLowerCase();
-
-                $('#bookTable tbody tr').each(function () {
-                    var row = $(this);
-                    var showRow = true;
-
-                    var title = row.find('td').eq(0).text().toLowerCase();
-                    var total = row.find('td').eq(1).text();
-                    var author = row.find('td').eq(2).text().toLowerCase();
-                    var publisher = row.find('td').eq(3).text().toLowerCase();
-                    var isbn = row.find('td').eq(4).text().toLowerCase();
-                    var category = row.find('td').eq(5).text().toLowerCase();
-                    var issued = row.find('td').eq(6).text();
-                    var returned = row.find('td').eq(7).text();
-                    var purchased = row.find('td').eq(8).text();
-                    var available = row.find('td').eq(9).text();
-
-                    if (titleFilter && !title.includes(titleFilter)) showRow = false;
-                    if (totalFilter && total !== totalFilter) showRow = false;
-                    if (issuedFilter && issued !== issuedFilter) showRow = false;
-                    if (returnedFilter && returned !== returnedFilter) showRow = false;
-                    if (purchasedFilter && purchased !== purchasedFilter) showRow = false;
-                    if (availableFilter && available !== availableFilter) showRow = false;
-                    if (authorFilter && !author.includes(authorFilter)) showRow = false;
-                    if (publisherFilter && !publisher.includes(publisherFilter)) showRow = false;
-                    if (isbnFilter && !isbn.includes(isbnFilter)) showRow = false;
-                    if (categoryFilter && !category.includes(categoryFilter)) showRow = false;
-
-                    row.toggle(showRow);
-                });
-            }
-        });
+        var tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
     </script>
 }
-

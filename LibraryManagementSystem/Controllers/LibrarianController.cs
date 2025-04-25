@@ -170,17 +170,15 @@ namespace LibraryManagementSystem.Controllers
                 ReturnedBooks = returnedBooks,
                 AvailableBooks = availableBooks,
                 TotalAuthors = totalAuthors,
-                Penalties = penalties,
                 TotalSales = totalSales,
                 TotalBooksSold = totalBooksSold,
                 TotalIssuedBooks = totalIssuedBooks,
-                TotalReturnedBooks = totalReturnedBooks
+                TotalReturnedBooks = totalReturnedBooks,
+                Penalties = penalties
             };
 
             return View(dashboardData);
         }
-
-
 
         public IActionResult AddBook()
         {
