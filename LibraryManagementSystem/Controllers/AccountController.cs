@@ -146,7 +146,7 @@ public class AccountController : Controller
 </body>
 </html>";
 
-        await _emailSender.SendEmailAsync(user.Email, "Registration Successful", message);
+        await _emailSender.SendEmailAsync(user.Email, subject, message);
 
         return RedirectToAction("Login", "Account");
     }
@@ -466,7 +466,7 @@ public class AccountController : Controller
 </body>
 </html>";
 
-        await _emailSender.SendEmailAsync(user.Email, "Password Reset Request", message);
+        await _emailSender.SendEmailAsync(user.Email, subject, message);
 
         // Store the reset code and email in the session
         HttpContext.Session.SetString("ResetCode", resetCode);
@@ -565,10 +565,7 @@ public class AccountController : Controller
 
             TempData["SuccessMessage"] = "Your password has been successfully changed!";
             return RedirectToAction("Profile");
-        
-
-        return View(model);
-    }
+            }
 
 
 
