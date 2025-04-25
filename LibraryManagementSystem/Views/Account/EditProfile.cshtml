@@ -54,12 +54,20 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        @* <div class="col-md-6">
                             <label class="form-label">Role</label>
                             <select class="form-select" name="Role">
                                 <option value="User" selected="@(Model.Role == "User")">User</option>
                                 <option value="Librarian" selected="@(Model.Role == "Librarian")">Librarian</option>
                             </select>
+                        </div> *@
+                        <div class="col-md-6">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" name="Role" disabled>
+                                <option value="User" selected="@(Model.Role == "User")">User</option>
+                                <option value="Librarian" selected="@(Model.Role == "Librarian")">Librarian</option>
+                            </select>
+                            <input type="hidden" name="Role" value="@Model.Role" />
                         </div>
 
                         <div class="col-md-6">

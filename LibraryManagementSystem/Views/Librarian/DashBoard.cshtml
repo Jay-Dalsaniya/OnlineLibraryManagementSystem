@@ -30,15 +30,18 @@
             </div>
         </div>
 
-        <div class="col">
-            <div class="card shadow-lg text-white bg-warning rounded-3 h-100 card-hover">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Books Issued</h5>
-                    <p class="card-text fs-3">@Model.IssuedBooks</p>
-                    <i class="bi bi-arrow-up-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of books issued"></i>
+        <a href="@Url.Action("ActiveRentals", "Librarian")" class="text-decoration-none">
+            <div class="col">
+                <div class="card shadow-lg text-white bg-warning rounded-3 h-100 card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Books Issued</h5>
+                        <p class="card-text fs-3">@Model.IssuedBooks</p>
+                        <i class="bi bi-arrow-up-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of books issued"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </a>
+
 
         <div class="col">
             <div class="card shadow-lg text-white bg-danger rounded-3 h-100 card-hover">
@@ -51,16 +54,20 @@
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
-        <div class="col">
-            <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Total Issued Books</h5>
-                    <p class="card-text fs-3">@Model.TotalIssuedBooks</p>
-                    <i class="bi bi-clipboard-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently issued"></i>
+    <a href="@Url.Action("ViewAllIssuedBooks", "Librarian")" class="text-decoration-none">
+        <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+            <div class="col">
+                <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Issued Books</h5>
+                        <p class="card-text fs-3">@Model.TotalIssuedBooks</p>
+                        <i class="bi bi-clipboard-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently issued"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+    </a>
+
+    <a href="@Url.Action("ViewAllReturnedBooks", "Librarian")" class="text-decoration-none">
         <div class="col">
             <div class="card shadow-lg text-white bg-success rounded-3 h-100 card-hover">
                 <div class="card-body text-center">
@@ -70,62 +77,69 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
-        <div class="col">
-            <div class="card shadow-lg text-white bg-dark rounded-3 h-100 card-hover">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Books Available</h5>
-                    <p class="card-text fs-3">@Model.AvailableBooks</p>
-                    <i class="bi bi-check-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently available for lending"></i>
-                </div>
-            </div>
-        </div>
+</div>
+    </a>
 
-        <div class="col">
-            <div class="card shadow-lg text-white bg-secondary rounded-3 h-100 card-hover">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Total Authors</h5>
-                    <p class="card-text fs-3">@Model.TotalAuthors</p>
-                    <i class="bi bi-person-lines-fill" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of authors in the library"></i>
-                </div>
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+    <div class="col">
+        <div class="card shadow-lg text-white bg-dark rounded-3 h-100 card-hover">
+            <div class="card-body text-center">
+                <h5 class="card-title">Books Available</h5>
+                <p class="card-text fs-3">@Model.AvailableBooks</p>
+                <i class="bi bi-check-circle" style="font-size: 50px;" data-bs-toggle="tooltip" title="Books currently available for lending"></i>
             </div>
         </div>
+    </div>
+
+    <div class="col">
+        <div class="card shadow-lg text-white bg-secondary rounded-3 h-100 card-hover">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Authors</h5>
+                <p class="card-text fs-3">@Model.TotalAuthors</p>
+                <i class="bi bi-person-lines-fill" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total number of authors in the library"></i>
+            </div>
+        </div>
+    </div>
+    <a href="@Url.Action("ViewAllPurchasedBooks", "Librarian")" class="text-decoration-none">
 
         <div class="col">
             <div class="card shadow-lg text-white bg-warning rounded-3 h-100 card-hover">
                 <div class="card-body text-center">
-                    <h5 class="card-title">Total Penalties</h5>
-                    <p class="card-text fs-3">@Model.Penalties.ToString("C")</p>
-                    <i class="bi bi-credit-card" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total penalties incurred by readers"></i>
+                    <h5 class="card-title">Total Books Sold</h5>
+                    <p class="card-text fs-3">@Model.TotalBooksSold</p>
+                    <i class="bi bi-credit-card" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total books sold"></i>
                 </div>
             </div>
         </div>
-    </div>
+</div>
+</a>
 
+<a href="@Url.Action("AllTransactions", "Librarian")" class="text-decoration-none">
     <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
         <div class="col">
             <div class="card shadow-lg text-white bg-success rounded-3 h-100 card-hover">
                 <div class="card-body text-center">
-                    <h5 class="card-title">Total Books Sold</h5>
-                    <p class="card-text fs-3">@Model.TotalBooksSold</p>
-                    <i class="bi bi-cart-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total books sold"></i>
+                    <h5 class="card-title">Total Penalties</h5>
+                    <p class="card-text fs-3">@Model.Penalties.ToString("C")</p>
+                    <i class="bi bi-cart-check" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total penalties incurred by readers"></i>
                 </div>
             </div>
         </div>
+</a>
 
-        <div class="col">
-            <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Total Sales</h5>
-                    <p class="card-text fs-3">@Model.TotalSales.ToString("C")</p>
-                    <i class="bi bi-wallet" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total revenue from book sales"></i>
-                </div>
+<a href="@Url.Action("AllTransactions", "Librarian")" class="text-decoration-none">
+    <div class="col">
+        <div class="card shadow-lg text-white bg-info rounded-3 h-100 card-hover">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Sales</h5>
+                <p class="card-text fs-3">@Model.TotalSales.ToString("C")</p>
+                <i class="bi bi-wallet" style="font-size: 50px;" data-bs-toggle="tooltip" title="Total revenue from book sales"></i>
             </div>
         </div>
     </div>
-</div>
-
+    </div>
+    </div>
+</a>
 <style>
     .card-hover:hover {
         transform: translateY(-10px);

@@ -1,0 +1,47 @@
+﻿@model List<LibraryManagementSystem.Models.BookRental>
+
+@{
+    ViewData["Title"] = "Active Book Rentals";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4 text-primary">Currently Issued Books</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Book Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Rented By</th>
+                <th>Rent Date</th>
+                <th>Due Date</th>
+                <th>Days Remaining</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model)
+            {
+                var daysRemaining = (rental.DueDate.Date - DateTime.Now.Date).Days;
+                <tr>
+                    <td>@rental.Book.Title</td>
+                    <td>@rental.Book.Author</td>
+                    <td>@rental.Book.ISBN</td>
+                    <td>@rental.User.FirstName @rental.User.LastName</td>
+                    <td>@rental.RentDate.ToString("yyyy-MM-dd")</td>
+                    <td>@rental.DueDate.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        @if (daysRemaining >= 0)
+                        {
+                            <span class="text-success">@daysRemaining days</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Overdue by @Math.Abs(daysRemaining) days</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

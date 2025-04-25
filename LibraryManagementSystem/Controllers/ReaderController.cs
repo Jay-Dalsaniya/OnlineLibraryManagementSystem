@@ -182,25 +182,25 @@ namespace LibraryManagementSystem.Controllers
             }
 
             var rentalDate = rental.RentDate;
-            var dueDate = rentalDate.AddDays(0);
+            var dueDate = rentalDate.AddDays(7);
             var currentDate = DateTime.Now;
 
             var lateFee = 0m;
-            var fine = 0m;
+            //var fine = 0m;
 
             if (currentDate > dueDate.AddMinutes(1))
             {
                 lateFee = 20m;
-                fine = 20m;
+                //fine = 20m;
             }
 
-            var rentalFee = lateFee;
+            //var rentalFee = lateFee;
 
             rental.RentalStatus = "Returned";
             rental.ReturnDate = currentDate;
             rental.LateFee = lateFee;
-            rental.RentalFee = rentalFee;
-            rental.Fine = fine;
+            //rental.RentalFee = rentalFee;
+           // rental.Fine = fine;
 
             rental.Book.AvailableCopies++;
 
@@ -355,11 +355,51 @@ namespace LibraryManagementSystem.Controllers
             return View(returnedBooks);
         }
 
+        //public async Task<IActionResult> AvailableBooks(string searchTerm = "", decimal? minPrice = null, decimal? maxPrice = null, int page = 1)
+        //{
+        //    // Query for books ensuring they have available copies
+        //    var booksQuery = _context.Books
+        //                             .Where(b => b.TotalCopies > 0 && b.AvailableCopies > 0)
+        //                             .AsQueryable(); // Ensure it's IQueryable for efficient querying
+
+        //    // Search functionality: Filter by Title or Author
+        //    if (!string.IsNullOrEmpty(searchTerm))
+        //    {
+        //        booksQuery = booksQuery.Where(b =>
+        //            b.Title.Contains(searchTerm) ||
+        //            b.Author.Contains(searchTerm));
+        //    }
+
+        //    // Optional price range filtering
+        //    if (minPrice.HasValue)
+        //    {
+        //        booksQuery = booksQuery.Where(b => b.Price >= minPrice.Value);
+        //    }
+
+        //    if (maxPrice.HasValue)
+        //    {
+        //        booksQuery = booksQuery.Where(b => b.Price <= maxPrice.Value);
+        //    }
+
+        //    // Fetch paginated results (10 items per page)
+        //    var booksList = await booksQuery
+        //        .OrderBy(b => b.Title)  // You can order by title, author, or another field
+        //        .ToListAsync();         // Execute the query asynchronously
+
+        //    var pagedBooks = booksList.ToPagedList(page, 10); // Paginate the results to 10 per page
+
+        //    // Pass search term and price filters to the view
+        //    ViewData["SearchTerm"] = searchTerm;
+        //    ViewData["MinPrice"] = minPrice;
+        //    ViewData["MaxPrice"] = maxPrice;
+
+        //    return View(pagedBooks);
+        //}
         public async Task<IActionResult> AvailableBooks(string searchTerm = "", decimal? minPrice = null, decimal? maxPrice = null, int page = 1)
         {
-            // Query for books ensuring they have available copies
+            // Query for books ensuring they have sold books (SellBook > 0) instead of AvailableCopies
             var booksQuery = _context.Books
-                                     .Where(b => b.TotalCopies > 0 && b.AvailableCopies > 0)
+                                     .Where(b => b.SellBook > 0) // Change filter from AvailableCopies to SellBook
                                      .AsQueryable(); // Ensure it's IQueryable for efficient querying
 
             // Search functionality: Filter by Title or Author
@@ -396,6 +436,8 @@ namespace LibraryManagementSystem.Controllers
             return View(pagedBooks);
         }
 
+
+
         public async Task<IActionResult> BuyBook(int bookId)
         {
             var userId = User.FindFirst("UserId")?.Value;
@@ -411,35 +453,34 @@ namespace LibraryManagementSystem.Controllers
             {
                 var book = await _context.Books.FindAsync(bookId);
 
-                if (book == null || book.AvailableCopies <= 0)
+                // Check if the book is available for purchase (SellBook > 0)
+                if (book == null || book.SellBook <= 0)
                 {
-                    TempData["ErrorMessage"] = "This book is not available for purchase.";
+                    TempData["ErrorMessage"] = "This book is no longer available for purchase.";
                     return RedirectToAction("AvailableBooks");
                 }
 
+                // Create a new purchase record
                 var purchase = new BookPurchase
                 {
                     BookId = bookId,
                     UserId = Convert.ToInt32(userId),
                     PurchaseDate = DateTime.Now,
-                    Price = book.Price,  // Set price from the book details
-                    Title = book.Title,  // Set title from the book details
-                    Author = book.Author,  // Set author from the book details
-                    ISBN = book.ISBN,  // Set ISBN from the book details
-                    Genre = book.Genre,  // Set genre from the book details
-                    Category = book.Category,  // Set category from the book details
-                    Subject = book.Subject,  // Set subject from the book details
-                    Summary = book.Summary,  // Set summary from the book details
-                    TotalCopies = book.TotalCopies,  // Set total copies from the book details
-                    Language = book.Language,  // Set language from the book details
-                    Edition = book.Edition,  // Set edition from the book details
+                    Price = book.Price,
+                    Title = book.Title,
+                    Author = book.Author,
+                    ISBN = book.ISBN,
+                    Genre = book.Genre,
+                    Category = book.Category,
+                    Subject = book.Subject,
+                    Summary = book.Summary,
+                    TotalCopies = book.TotalCopies,
+                    Language = book.Language,
+                    Edition = book.Edition,
                 };
 
-                // Decrement both AvailableCopies and TotalCopies
-                book.AvailableCopies--;
-                book.TotalCopies--;
+                book.SellBook--;
 
-                // Add purchase and save changes
                 _context.BookPurchases.Add(purchase);
                 _context.Books.Update(book);
 
@@ -457,6 +498,11 @@ namespace LibraryManagementSystem.Controllers
                 return RedirectToAction("AvailableBooks");
             }
         }
+
+
+
+
+
         //public async Task<IActionResult> BookDetails(int bookId)
         //{
         //    // Find the book by its ID

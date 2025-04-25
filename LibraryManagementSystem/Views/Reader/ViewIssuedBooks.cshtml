@@ -93,8 +93,8 @@
             </div>
             <div class="modal-body">
                 <p id="lateFeeMessage"></p>
-                <p id="fineMessage"></p>
-                <p id="rentalFeeMessage"></p>
+                @* <p id="fineMessage"></p> *@
+                @* <p id="rentalFeeMessage"></p> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -107,8 +107,8 @@
 <script>
     function showReturnDetails() {
         var lateFee = '@ViewData["LateFee"]';  
-        var fine = '@ViewData["Fine"]';
-        var rentalFee = '@ViewData["RentalFee"]';
+        // var fine = '@ViewData["Fine"]';
+        // var rentalFee = '@ViewData["RentalFee"]';
 
         document.getElementById("lateFeeMessage").innerText = "Late Fee: ₹" + lateFee;
 

@@ -60,5 +60,8 @@ namespace LibraryManagementSystem.Models.Books
 
         [StringLength(50)]
         public string Edition { get; set; }
+
+        public int SellBook { get; set; }
+
     }
 }

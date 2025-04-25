@@ -50,8 +50,8 @@ namespace LibraryManagementSystem.Controllers
                 TotalCopies = book.TotalCopies, 
                 Language = book.Language,  
                 Edition = book.Edition,  
-                RentalFee = 20.00m, 
-                Fine = 0,  
+                //RentalFee = 20.00m, 
+                //Fine = 0,  
             };
 
             _context.BookRentals.Add(rental);

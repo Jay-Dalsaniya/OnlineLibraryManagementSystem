@@ -120,6 +120,17 @@ namespace LibraryManagementSystem.Controllers
             return View(books);
         }
 
+        public async Task<IActionResult> ActiveRentals()
+        {
+            var activeRentals = await _context.BookRentals
+                .Include(br => br.Book)
+                .Include(br => br.User)
+                .Where(br => br.RentalStatus == "Active")
+                .OrderByDescending(br => br.RentDate)
+                .ToListAsync();
+
+            return View(activeRentals);
+        }
 
         public async Task<IActionResult> Dashboard()
         {
@@ -173,7 +184,7 @@ namespace LibraryManagementSystem.Controllers
 
         public IActionResult AddBook()
         {
-            return View(new AddBookViewModel()); // Ensure that you're passing a valid model.
+            return View(new AddBookViewModel()); 
         }
 
         [HttpPost]
@@ -211,6 +222,7 @@ namespace LibraryManagementSystem.Controllers
                     Condition = model.Condition,
                     Summary = model.Summary,
                     TotalCopies = model.TotalCopies,
+                    SellBook = model.SellBook,
                     Genre = model.Genre,
                     AvailableCopies = model.TotalCopies,
                     Language = model.Language,
@@ -263,6 +275,7 @@ namespace LibraryManagementSystem.Controllers
                 Condition = book.Condition,
                 Summary = book.Summary,
                 TotalCopies = book.TotalCopies,
+                SellBook = book.SellBook,
                 Language = book.Language,
                 Edition = book.Edition
             };
@@ -342,6 +355,7 @@ namespace LibraryManagementSystem.Controllers
             book.Condition = model.Condition;
             book.Summary = model.Summary;
             book.TotalCopies = model.TotalCopies;
+            book.SellBook = model.SellBook;
             book.Language = model.Language;
             book.Edition = model.Edition;
 
@@ -697,7 +711,7 @@ namespace LibraryManagementSystem.Controllers
             var allRentals = _context.BookRentals
                 .Include(r => r.Book)
                 .Include(r => r.User)
-                .Where(r => r.LateFee >= 100)
+                .Where(r => r.LateFee >0)
                 .OrderByDescending(r => r.RentDate)
                 .ToList();
 

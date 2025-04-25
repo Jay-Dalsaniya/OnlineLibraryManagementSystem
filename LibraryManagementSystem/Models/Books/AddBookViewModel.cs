@@ -37,7 +37,9 @@ namespace LibraryManagementSystem.Models.Books
         [Required]
         public int TotalCopies { get; set; }  
         public string Language { get; set; }  
-        public string Edition { get; set; }  
+        public string Edition { get; set; }
+        public int SellBook { get; set; }
+
 
     }
 }

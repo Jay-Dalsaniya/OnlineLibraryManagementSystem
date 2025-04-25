@@ -60,7 +60,9 @@ namespace LibraryManagementSystem.Models
 
         public string Condition { get; set; }
 
-        public string Summary { get; set; } 
+        public string Summary { get; set; }
+
+        public int SellBook { get; set; } 
 
         public ICollection<BookRental> BookRentals { get; set; } = new List<BookRental>();
         public ICollection<BookPurchase> BookPurchases { get; set; } = new List<BookPurchase>();

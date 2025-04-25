@@ -49,9 +49,9 @@
                     <th>Rent Date</th>
                     <th>Return Date</th>
                     <th>Due Date</th>
-                    <th>Rental Fee</th>
+                    @* <th>Rental Fee</th> *@
                     <th>Rental Duration</th>
-                    <th>Fine</th>
+                    @* <th>Fine</th> *@
                     <th>Late Return</th>
                 </tr>
             </thead>
@@ -76,7 +76,7 @@
                             }
                         </td>
                         <td>@rental.DueDate.ToShortDateString()</td>
-                        <td>@string.Format("{0:C}", rental.RentalFee)</td>
+                        @* <td>@string.Format("{0:C}", rental.RentalFee)</td> *@
                         <td>
                             @if (rental.ReturnDate.HasValue)
                             {
@@ -87,7 +87,7 @@
                                 <span class="text-danger">N/A</span>
                             }
                         </td>
-                        <td>
+                       @*  <td>
                             @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
                             {
                                 @string.Format("{0:C}", rental.Fine ?? 0)
@@ -96,8 +96,8 @@
                             {
                                 <span>No Fine</span>
                             }
-                        </td>
-                        <td>
+                        </td> *@
+                       @*  <td>
                             @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
                             {
                                 <span class="text-danger">Yes</span>
@@ -106,7 +106,32 @@
                             {
                                 <span class="text-success">No</span>
                             }
+                        </td> *@
+                        <td>
+                            @if (rental.ReturnDate.HasValue)
+                            {
+                                if (rental.ReturnDate.Value.Date > rental.DueDate.Date)
+                                {
+                                    <span class="text-danger">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success">No</span>
+                                }
+                            }
+                            else
+                            {
+                                if (DateTime.Now.Date > rental.DueDate.Date)
+                                {
+                                    <span class="text-danger">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="text-success">No</span>
+                                }
+                            }
                         </td>
+
                     </tr>
                 }
             </tbody>
