@@ -18,15 +18,11 @@ namespace LibraryManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-      
         public LibrarianController(ApplicationDbContext context)
         {
             _context = context;
          
         }
-
-
-      
         private decimal CalculateLateFee(BookRental rental)
         {
             if (rental.ReturnDate.HasValue && rental.ReturnDate > rental.DueDate)

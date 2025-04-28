@@ -214,69 +214,6 @@ public class AccountController : Controller
         return View(model);
     }
 
-
-    //[HttpGet]
-    //public IActionResult Login()
-    //{
-    //    return View();
-    //}
-
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Login(LoginViewModel model)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        var user = _context.Users.FirstOrDefault(u => u.Email.ToLower() == model.Email.ToLower());
-    //        if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-    //        {
-    //            var claims = new List<Claim>
-    //        {
-    //            new Claim(ClaimTypes.Name, user.FirstName),
-    //            new Claim("FullName", $"{user.FirstName} {user.LastName}"),
-    //            new Claim("UserId", user.Id.ToString()),
-    //            new Claim("Role", user.Role)  // Add role claim here
-    //        };
-
-    //            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    //            var authProperties = new AuthenticationProperties
-    //            {
-    //                IsPersistent = true,
-    //                ExpiresUtc = DateTime.UtcNow.AddHours(1)
-    //            };
-
-    //            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
-    //            var role = User.FindFirst("Role")?.Value;
-    //            Console.WriteLine($"User role: {role}");
-
-    //            if (user.Role == "Reader")
-    //            {
-    //                return RedirectToAction("Dashboard", "Reader"); 
-    //            }
-    //            else if (user.Role == "Librarian")
-    //            {
-    //                return RedirectToAction("Dashboard", "Librarian"); 
-    //            }
-    //            else if (user.Role == "Admin")
-    //            {
-    //                return RedirectToAction("Dashboard", "Admin"); 
-    //            }
-    //            else
-    //            {
-    //                ModelState.AddModelError(string.Empty, "Invalid role.");
-    //                return View(model);
-    //            }
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError(string.Empty, "Invalid email or password.");
-    //        }
-    //    }
-    //    return View(model);
-    //}
-
-
     [Authorize]
     public IActionResult Dashboard()
     {
@@ -388,7 +325,6 @@ public class AccountController : Controller
         return View();
     }
 
-    // Forgot Password Action
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ForgotPassword(string email)
@@ -480,7 +416,6 @@ public class AccountController : Controller
     {
         return View();
     }
-    // Enter Reset Code Action
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult EnterResetCode(string email, string resetCode)
@@ -566,8 +501,6 @@ public class AccountController : Controller
             TempData["SuccessMessage"] = "Your password has been successfully changed!";
             return RedirectToAction("Profile");
             }
-
-
 
     [Authorize]
     public async Task<IActionResult> Logout()

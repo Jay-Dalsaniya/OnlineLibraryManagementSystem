@@ -23,29 +23,10 @@ namespace LibraryManagementSystem.Controllers
 
         }
 
-        // Index Action
-        //public async Task<IActionResult> Index()
-        //{
-        //    var dashboardData = new DashboardViewModel
-        //    {
-        //        TotalBooks = await _context.Books.CountAsync(),
-        //        IssuedBooks = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
-        //        ReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue),
-        //        AvailableBooks = await _context.Books.SumAsync(b => b.TotalCopies) - await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
-        //        TotalAuthors = await _context.Books.Select(b => b.Author).Distinct().CountAsync(),
-        //        TotalUsers = await _context.Users.CountAsync(),
-        //        TotalSales = await _context.BookPurchases.SumAsync(bp => bp.Price),
-        //        TotalBookPurchases = await _context.BookPurchases.CountAsync()
-        //    };
-
-        //    return View(dashboardData);
-        //}
-
         public async Task<IActionResult> Index()
         {
             var dashboardData = new DashboardViewModel
             {
-                // Basic Data
                 TotalBooks = await _context.Books.CountAsync(),
                 IssuedBooks = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue),
                 ReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue),
@@ -54,54 +35,18 @@ namespace LibraryManagementSystem.Controllers
                 TotalUsers = await _context.Users
                             .Where(u => u.Role != "Admin" && u.Role != "Librarian")
                             .CountAsync(),
-                // Sales and Purchases Data
                 TotalSales = await _context.BookPurchases.SumAsync(bp => bp.Price),
                 TotalBooksSold = await _context.BookPurchases.CountAsync(),
                 TotalBookPurchases = await _context.BookPurchases.CountAsync(),
-
-                // Additional Metrics
-                ActiveTransactions = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue), // Active Rentals
-                OverdueBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue && br.DueDate < DateTime.Now && !br.ReturnDate.HasValue), // Overdue Rentals
-                TotalLateFees = await _context.BookRentals.Where(br => br.LateFee.HasValue).SumAsync(br => br.LateFee.Value), // Sum of all late fees
-                TotalReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue), // Books Returned
-                TotalBooksInStock = await _context.Books.SumAsync(b => b.TotalCopies) // Total stock in the library
+                ActiveTransactions = await _context.BookRentals.CountAsync(br => !br.ReturnDate.HasValue), 
+                OverdueBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue && br.DueDate < DateTime.Now && !br.ReturnDate.HasValue), 
+                TotalLateFees = await _context.BookRentals.Where(br => br.LateFee.HasValue).SumAsync(br => br.LateFee.Value),
+                TotalReturnedBooks = await _context.BookRentals.CountAsync(br => br.ReturnDate.HasValue), 
+                TotalBooksInStock = await _context.Books.SumAsync(b => b.TotalCopies) 
             };
 
             return View(dashboardData);
         }
-
-
-
-        //public IActionResult Index()
-        //{
-        //    var role = User.FindFirst("Role")?.Value;
-        //    Console.WriteLine($"User role: {role}");
-
-        //    var books = _context.Books
-        //        .Include(b => b.BookRentals) 
-        //        .Include(b => b.BookPurchases) 
-        //        .ToList();
-
-        //    var bookDetails = books.Select(b => new AdminBookDetailViewModel
-        //    {
-        //        BookId = b.BookId,
-        //        Title = b.Title,
-        //        Author = b.Author,
-        //        Publisher = b.Publisher,
-        //        ISBN = b.ISBN,
-        //        Category = b.Category,
-        //        TotalCopies = b.TotalCopies,
-        //        IssuedCount = b.BookRentals.Count(r => !r.ReturnDate.HasValue), 
-        //        ReturnedCount = b.BookRentals.Count(r => r.ReturnDate.HasValue), 
-        //        PurchasedCount = b.BookPurchases.Count(),
-        //        AvailableCount = b.TotalCopies - b.BookRentals.Count(r => !r.ReturnDate.HasValue)
-        //    }).ToList();
-
-        //    ViewBag.BookDetails = bookDetails;
-
-        //    return View();
-        //}
-
         public IActionResult Dashboard()
         {
             var role = User.FindFirst("Role")?.Value;

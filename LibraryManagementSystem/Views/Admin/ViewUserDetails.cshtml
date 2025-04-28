@@ -6,19 +6,16 @@
 
 <h2 class="text-center my-4 display-4">User Details</h2>
 
-<!-- User Details Card -->
 <div class="card shadow-lg rounded-3 mb-5">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0 text-center">User Information</h3>
     </div>
     <div class="card-body">
         <div class="row">
-            <!-- User Image -->
             <div class="col-md-3 text-center mb-4">
                 <img src="@(Url.Content("~/images/" + Model.ImageName))" alt="User Image"
                      class="rounded-circle img-fluid border shadow-sm" style="width: 250px; height: 250px; object-fit: cover;" />
             </div>
-            <!-- User Details -->
             <div class="col-md-9">
                 <p><strong>Username:</strong> @Model.FirstName @Model.LastName</p>
                 <p><strong>Email:</strong> @Model.Email</p>
@@ -34,7 +31,6 @@
 
 @if (Model.Role == "Reader")
 {
-    <!-- Reader-Specific Content -->
     <h3 class="text-center my-4 text-info">Book Rentals</h3>
     @if (Model.BookRentals.Any())
     {
@@ -49,9 +45,7 @@
                     <th>Rent Date</th>
                     <th>Return Date</th>
                     <th>Due Date</th>
-                    @* <th>Rental Fee</th> *@
                     <th>Rental Duration</th>
-                    @* <th>Fine</th> *@
                     <th>Late Return</th>
                 </tr>
             </thead>
@@ -76,7 +70,6 @@
                             }
                         </td>
                         <td>@rental.DueDate.ToShortDateString()</td>
-                        @* <td>@string.Format("{0:C}", rental.RentalFee)</td> *@
                         <td>
                             @if (rental.ReturnDate.HasValue)
                             {
@@ -87,26 +80,6 @@
                                 <span class="text-danger">N/A</span>
                             }
                         </td>
-                       @*  <td>
-                            @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
-                            {
-                                @string.Format("{0:C}", rental.Fine ?? 0)
-                            }
-                            else
-                            {
-                                <span>No Fine</span>
-                            }
-                        </td> *@
-                       @*  <td>
-                            @if (!rental.ReturnDate.HasValue && DateTime.Now > rental.DueDate)
-                            {
-                                <span class="text-danger">Yes</span>
-                            }
-                            else
-                            {
-                                <span class="text-success">No</span>
-                            }
-                        </td> *@
                         <td>
                             @if (rental.ReturnDate.HasValue)
                             {
@@ -218,8 +191,6 @@ else @if (Model.Role == "Librarian")
         <h3 class="text-center text-muted">No books uploaded by this librarian.</h3>
     }
 }
-
-<!-- Back Button -->
 <div class="text-center mt-4">
     <a asp-action="ViewAllUsers" class="btn btn-primary btn-lg shadow-lg">
         <i class="bi bi-arrow-left-circle"></i> Back to Users

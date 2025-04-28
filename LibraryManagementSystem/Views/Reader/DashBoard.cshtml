@@ -7,10 +7,7 @@
 <div class="container mt-5">
     <div class="text-center">
         <h2 class="display-4 text-primary">Reader Dashboard</h2>
-
-        <!-- Dashboard Statistics -->
         <div class="row mt-5">
-            <!-- Total Books Issued -->
             <div class="col-md-4 mb-4">
                 <div class="card shadow-lg border-0 rounded-3 bg-info text-white">
                     <div class="card-body text-center">
@@ -22,8 +19,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Total Books Returned -->
             <div class="col-md-4 mb-4">
                 <div class="card shadow-lg border-0 rounded-3 bg-warning text-dark">
                     <div class="card-body text-center">
@@ -35,8 +30,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Total Books Purchased -->
             <div class="col-md-4 mb-4">
                 <div class="card shadow-lg border-0 rounded-3 bg-success text-white">
                     <div class="card-body text-center">
@@ -49,21 +42,16 @@
                 </div>
             </div>
         </div>
-
-        <!-- Links Section for Actions (View Books, Issue Books, Buy Books) -->
         <div class="row mt-5">
             <div class="col-md-12">
                 <h4 class="text-secondary">Quick Actions</h4>
                 <div class="d-flex justify-content-around">
-                    <!-- View Books Link -->
                     <a href="@Url.Action("ViewBooks", "Reader")" class="btn btn-outline-info btn-lg rounded-pill hover-shadow">
                         <i class="bi bi-book"></i> View Books
                     </a>
-                    <!-- Issue Books Link -->
                     <a href="@Url.Action("ViewIssuedBooks", "Reader")" class="btn btn-outline-primary btn-lg rounded-pill hover-shadow">
                         <i class="bi bi-bookmarks"></i> Issue Books
                     </a>
-                    <!-- Buy Books Link -->
                     <a href="@Url.Action("AvailableBooks", "Reader")" class="btn btn-outline-success btn-lg rounded-pill hover-shadow">
                         <i class="bi bi-cart-plus"></i> Buy Books
                     </a>

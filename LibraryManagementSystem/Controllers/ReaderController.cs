@@ -19,8 +19,6 @@ namespace LibraryManagementSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
-
-
         public ReaderController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
@@ -66,7 +64,6 @@ namespace LibraryManagementSystem.Controllers
 
             return View(dashboardData);
         }
-
         public async Task<IActionResult> ViewBooks(string searchTerm)
         {
             var booksQuery = _context.Books.Where(b => b.AvailableCopies > 0);
@@ -84,7 +81,6 @@ namespace LibraryManagementSystem.Controllers
 
             return View(books);
         }
-
         public async Task<IActionResult> IssueBook(int bookId)
         {
             var userId = User.FindFirst("UserId")?.Value;
@@ -132,7 +128,6 @@ namespace LibraryManagementSystem.Controllers
             TempData["SuccessMessage"] = "Book issued successfully!";
             return RedirectToAction("ViewBooks");
         }
-
         public IActionResult ViewIssuedBooks()
         {
             var userId = User.FindFirst("UserId")?.Value;  // Use "UserId" to match the claim key
@@ -166,7 +161,6 @@ namespace LibraryManagementSystem.Controllers
             // Return the rental object to the view for confirmation
             return View(rental); // Display the confirmation page to the user
         }
-
         [HttpPost]
         public async Task<IActionResult> ReturnBookConfirmed(int rentalId)
         {
@@ -194,14 +188,9 @@ namespace LibraryManagementSystem.Controllers
                 //fine = 20m;
             }
 
-            //var rentalFee = lateFee;
-
             rental.RentalStatus = "Returned";
             rental.ReturnDate = currentDate;
             rental.LateFee = lateFee;
-            //rental.RentalFee = rentalFee;
-           // rental.Fine = fine;
-
             rental.Book.AvailableCopies++;
 
             await _context.SaveChangesAsync();
@@ -320,7 +309,6 @@ namespace LibraryManagementSystem.Controllers
 
             return RedirectToAction("ViewIssuedBooks");
         }
-
         [HttpGet]
         public async Task<IActionResult> ViewReturnedBooks()
         {
@@ -354,47 +342,6 @@ namespace LibraryManagementSystem.Controllers
             // Pass the returned books data to the view
             return View(returnedBooks);
         }
-
-        //public async Task<IActionResult> AvailableBooks(string searchTerm = "", decimal? minPrice = null, decimal? maxPrice = null, int page = 1)
-        //{
-        //    // Query for books ensuring they have available copies
-        //    var booksQuery = _context.Books
-        //                             .Where(b => b.TotalCopies > 0 && b.AvailableCopies > 0)
-        //                             .AsQueryable(); // Ensure it's IQueryable for efficient querying
-
-        //    // Search functionality: Filter by Title or Author
-        //    if (!string.IsNullOrEmpty(searchTerm))
-        //    {
-        //        booksQuery = booksQuery.Where(b =>
-        //            b.Title.Contains(searchTerm) ||
-        //            b.Author.Contains(searchTerm));
-        //    }
-
-        //    // Optional price range filtering
-        //    if (minPrice.HasValue)
-        //    {
-        //        booksQuery = booksQuery.Where(b => b.Price >= minPrice.Value);
-        //    }
-
-        //    if (maxPrice.HasValue)
-        //    {
-        //        booksQuery = booksQuery.Where(b => b.Price <= maxPrice.Value);
-        //    }
-
-        //    // Fetch paginated results (10 items per page)
-        //    var booksList = await booksQuery
-        //        .OrderBy(b => b.Title)  // You can order by title, author, or another field
-        //        .ToListAsync();         // Execute the query asynchronously
-
-        //    var pagedBooks = booksList.ToPagedList(page, 10); // Paginate the results to 10 per page
-
-        //    // Pass search term and price filters to the view
-        //    ViewData["SearchTerm"] = searchTerm;
-        //    ViewData["MinPrice"] = minPrice;
-        //    ViewData["MaxPrice"] = maxPrice;
-
-        //    return View(pagedBooks);
-        //}
         public async Task<IActionResult> AvailableBooks(string searchTerm = "", decimal? minPrice = null, decimal? maxPrice = null, int page = 1)
         {
             // Query for books ensuring they have sold books (SellBook > 0) instead of AvailableCopies
@@ -435,9 +382,6 @@ namespace LibraryManagementSystem.Controllers
 
             return View(pagedBooks);
         }
-
-
-
         public async Task<IActionResult> BuyBook(int bookId)
         {
             var userId = User.FindFirst("UserId")?.Value;
@@ -498,28 +442,6 @@ namespace LibraryManagementSystem.Controllers
                 return RedirectToAction("AvailableBooks");
             }
         }
-
-
-
-
-
-        //public async Task<IActionResult> BookDetails(int bookId)
-        //{
-        //    // Find the book by its ID
-        //    var book = _context.Books.FirstOrDefault(b => b.BookId == bookId);
-
-        //    // Check if the book is found
-        //    if (book == null)
-        //    {
-        //        TempData["ErrorMessage"] = "Book not found.";
-        //        return RedirectToAction("ViewBooks");
-        //    }
-
-        //    // Pass the book details to the view
-        //    return View(book);
-        //}
-        // Ensure this is included for async methods
-
         public async Task<IActionResult> BookDetails(int bookId)
         {
             // Find the book by its ID asynchronously
@@ -536,8 +458,6 @@ namespace LibraryManagementSystem.Controllers
             // Pass the book details to the view
             return View(book);
         }
-
-
         public async Task<IActionResult> ViewPurchasedBooks(string searchTerm = "", decimal? minPrice = null, decimal? maxPrice = null, int page = 1)
         {
             var userId = User.FindFirst("UserId")?.Value;

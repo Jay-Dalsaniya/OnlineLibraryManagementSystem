@@ -68,8 +68,6 @@ namespace LibraryManagementSystem.Models
         public int TotalCopies { get; set; }  
         public string Language { get; set; }  
         public string Edition { get; set; }  
-        //public decimal RentalFee { get; set; }
-       // public decimal? Fine { get; set; }
         public int ReaderId { get; set; } 
 
     }

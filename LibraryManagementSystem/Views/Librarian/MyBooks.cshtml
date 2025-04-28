@@ -9,7 +9,6 @@
 <div class="container my-5">
     <h2 class="text-center text-primary mb-4">My Books</h2>
 
-    <!-- Search Form -->
     <form asp-action="MyBooks" method="get" class="mb-4">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -23,7 +22,6 @@
         </div>
     </form>
 
-    <!-- Display Error Message -->
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger text-center">
@@ -31,7 +29,6 @@
         </div>
     }
 
-    <!-- No Books Found Message -->
     @if (!Model.Any())
     {
         <div class="text-center mt-4">
@@ -43,14 +40,12 @@
     }
     else
     {
-        <!-- Book Cards -->
         <div class="row g-4">
             @foreach (var book in Model)
             {
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card shadow-sm border-0 h-100">
                         <a href="@Url.Action("BookDetails", "Librarian", new { id = book.BookId })" class="text-decoration-none text-dark">
-                            <!-- Book Image -->
                             @if (!string.IsNullOrEmpty(book.ImagePath))
                             {
                                 <img src="@Url.Content($"~{book.ImagePath}")"
@@ -65,7 +60,6 @@
                                 </div>
                             }
 
-                            <!-- Book Info -->
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title text-truncate">@book.Title</h5>
                                 <p class="card-text mb-1"><strong>Author:</strong> @book.Author</p>
@@ -75,7 +69,6 @@
                             </div>
                         </a>
 
-                        <!-- Action Buttons -->
                         @if (book.CreatedBy == User.FindFirst(ClaimTypes.Name)?.Value)
                         {
                             <div class="card-footer bg-white border-top-0 pt-0 pb-3 px-3 d-flex justify-content-between">
